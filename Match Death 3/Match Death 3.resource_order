@@ -19,13 +19,16 @@
   "ResourceOrderSettings": [
     {"name":"spr_selected","order":1,"path":"sprites/spr_selected/spr_selected.yy",},
     {"name":"anc_effects","order":1,"path":"animcurves/anc_effects/anc_effects.yy",},
+    {"name":"Button_functions","order":4,"path":"scripts/Button_functions/Button_functions.yy",},
+    {"name":"spr_button","order":3,"path":"sprites/spr_button/spr_button.yy",},
     {"name":"Controller_functions","order":1,"path":"scripts/Controller_functions/Controller_functions.yy",},
     {"name":"spr_monsters","order":2,"path":"sprites/spr_monsters/spr_monsters.yy",},
-    {"name":"obj_tile","order":4,"path":"objects/obj_tile/obj_tile.yy",},
+    {"name":"obj_tile","order":5,"path":"objects/obj_tile/obj_tile.yy",},
     {"name":"Enemy_functions","order":3,"path":"scripts/Enemy_functions/Enemy_functions.yy",},
     {"name":"Utilities_functions","order":2,"path":"scripts/Utilities_functions/Utilities_functions.yy",},
     {"name":"obj_board","order":3,"path":"objects/obj_board/obj_board.yy",},
     {"name":"obj_camera","order":1,"path":"objects/obj_camera/obj_camera.yy",},
+    {"name":"obj_button","order":4,"path":"objects/obj_button/obj_button.yy",},
     {"name":"obj_enemy","order":2,"path":"objects/obj_enemy/obj_enemy.yy",},
   ],
 }

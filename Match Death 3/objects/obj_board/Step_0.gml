@@ -36,12 +36,11 @@ switch(boardState){
 				CheckGroups();	
 			}
 			//tileGamePos = [SmoothLerp(tileGridPos[0], tileGridPosNext[0], anc_fall, "Fall", consideringMoveCounter), SmoothLerp(tileGridPos[1], tileGridPosNext[1], anc_fall, "Fall", consideringMoveCounter)];
-
 		}
 	break;
 	case boardS.enemyTurn:
 		boardState = boardS.playerTurn;	
-		currentMoves = 0;
+		remainingMoves = obj_board.movesPerTurn;
 		repeat(5){
 			CreateTileTopRandomPos(irandom(tileT.energy));
 		}

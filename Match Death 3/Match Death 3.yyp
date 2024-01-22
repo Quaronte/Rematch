@@ -36,8 +36,10 @@
   "resources": [
     {"id":{"name":"spr_selected","path":"sprites/spr_selected/spr_selected.yy",},},
     {"id":{"name":"anc_effects","path":"animcurves/anc_effects/anc_effects.yy",},},
+    {"id":{"name":"Button_functions","path":"scripts/Button_functions/Button_functions.yy",},},
     {"id":{"name":"spr_tiles","path":"sprites/spr_tiles/spr_tiles.yy",},},
     {"id":{"name":"anc_fall","path":"animcurves/anc_fall/anc_fall.yy",},},
+    {"id":{"name":"spr_button","path":"sprites/spr_button/spr_button.yy",},},
     {"id":{"name":"Controller_functions","path":"scripts/Controller_functions/Controller_functions.yy",},},
     {"id":{"name":"Match_3_functions","path":"scripts/Match_3_functions/Match_3_functions.yy",},},
     {"id":{"name":"spr_monsters","path":"sprites/spr_monsters/spr_monsters.yy",},},
@@ -48,6 +50,7 @@
     {"id":{"name":"Utilities_functions","path":"scripts/Utilities_functions/Utilities_functions.yy",},},
     {"id":{"name":"obj_board","path":"objects/obj_board/obj_board.yy",},},
     {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},},
+    {"id":{"name":"obj_button","path":"objects/obj_button/obj_button.yy",},},
     {"id":{"name":"obj_enemy","path":"objects/obj_enemy/obj_enemy.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
   ],

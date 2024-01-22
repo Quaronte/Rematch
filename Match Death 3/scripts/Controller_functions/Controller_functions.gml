@@ -11,16 +11,27 @@ function CheckHover(){
 			tileHovered.isHover = false;
 			tileHovered = -1;
 		}
+		if(buttonHovered != -1){
+			buttonHovered.isHover = false;
+			buttonHovered = -1;
+		}
 		return;
 	}
-	
-	if(objectOnMouse.object_index == obj_tile){
-		objectOnMouse.isHover = true;
-		if(tileHovered != objectOnMouse && tileHovered != -1){
-			tileHovered.isHover = false;
-		}
-		tileHovered = objectOnMouse;
+	switch(objectOnMouse.object_index){
+		case obj_tile:
+				objectOnMouse.isHover = true;
+				if(tileHovered != objectOnMouse && tileHovered != -1){
+					tileHovered.isHover = false;
+				}
+				tileHovered = objectOnMouse;
+			break;
+		case obj_button:
+			with(objectOnMouse){
+				script_execute(ButtonOnHover);
+			}
+			break;
 	}
+	
 }
 
 function CheckSelected(){
@@ -30,20 +41,28 @@ function CheckSelected(){
 		if(objectOnMouse == noone){
 			return;
 		}
-	
-		if(objectOnMouse.object_index == obj_tile){
-			if(objectOnMouse.isReadyForPlay == true){
-				if(!isGroupBreaking){
-					BreakGroup(objectOnMouse);
-					isGroupBreaking = true;
+		switch(objectOnMouse.object_index){
+			case obj_tile:
+				if(objectOnMouse.isReadyForPlay == true){
+					if(!isGroupBreaking){
+						BreakGroup(objectOnMouse);
+						isGroupBreaking = true;
+					}
+					return;
 				}
-				return;
-			}
-			if(objectOnMouse.fallCounter == 1){
-				tileSelected = objectOnMouse;
-				tileSelected.isSelected = true;
-				tileSelected.depth = -100;
-			}
+				if(objectOnMouse.fallCounter == 1 && obj_board.remainingMoves > 0){
+					tileSelected = objectOnMouse;
+					tileSelected.isSelected = true;
+					tileSelected.depth = -100;
+				}
+			break;
+			case obj_button:
+				ShowDebug("Intentando seleccionar ratón");
+				with(objectOnMouse){
+					ShowDebug("Por lo menos existe");
+					script_execute(ButtonOnSelect);
+				}
+				break;
 		}
 	}
 	
@@ -55,6 +74,11 @@ function CheckSelected(){
 				CheckGroups();	
 			}
 			tileSelected = -1;
+		}
+		if(buttonSelected != -1){
+			with(buttonSelected){
+				script_execute(ButtonOnDeselect);
+			}
 		}
 	}
 }

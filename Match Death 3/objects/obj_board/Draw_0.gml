@@ -16,57 +16,59 @@ if(tileSelected != -1){
 
 draw_set_halign(fa_center);
 
-for(var i = 0; i < ds_grid_height(playGrid); i++){
-	for(var j = 0; j < ds_grid_width(playGrid); j++){
-		draw_text(64 * j, 64 * i, string_replace(string(playGrid[# j, i]), "ref instance 100", ""));
-	}
-}
-
 
 var mouseGridPosition = GetGridMousePosition();
 var textDebugPos = [64*9, -20];
-draw_text(textDebugPos[0], textDebugPos[1], "Current Moves: " + string(currentMoves));
-textDebugPos[1] += 30;
-draw_text(textDebugPos[0], textDebugPos[1], "Hover Tile " + string(tileHovered));
-textDebugPos[1] += 30;
-draw_text(textDebugPos[0], textDebugPos[1], "Selected Tile: " + string(tileSelected));
+draw_text(textDebugPos[0], textDebugPos[1], "Current Moves: " + string(remainingMoves) + "/" + string(movesPerTurn));
 textDebugPos[1] += 30;
 
-if(IsOutOfGrid(mouseGridPosition, obj_board.playGrid)){ return; }
-
-var cellContent = obj_board.playGrid[# mouseGridPosition[0], mouseGridPosition[1]];
-draw_text(textDebugPos[0], textDebugPos[1], "Mouse Grid Pos: " + string(mouseGridPosition));
-textDebugPos[1] += 30;
-draw_text(textDebugPos[0], textDebugPos[1], "Grid element: " + string(cellContent));
-textDebugPos[1] += 30;
-
-if(cellContent != -1){
-	with(cellContent){
-		if(isHover){
-			
-			draw_text(textDebugPos[0], textDebugPos[1], "Current Type: " + string(tileType));
-			textDebugPos[1] += 30;
-			draw_text(textDebugPos[0], textDebugPos[1], "Current Pos: " + string(tileGridPos));
-			textDebugPos[1] += 30;
-			draw_text(textDebugPos[0], textDebugPos[1], "Next Pos: " + string(tileGridPosNext));
-			textDebugPos[1] += 30;
-			draw_text(textDebugPos[0], textDebugPos[1], "Hover: " + string(isHover));
-			textDebugPos[1] += 30;
-			draw_text(textDebugPos[0], textDebugPos[1], "Selected: " + string(isSelected));
-			textDebugPos[1] += 30;
-			draw_text(textDebugPos[0], textDebugPos[1], "Ready to play: " + string(isReadyForPlay));
-			textDebugPos[1] += 30;
-			draw_text(textDebugPos[0], textDebugPos[1], "H: " + string(isHorizontalGroup) +   "V: " + string(isVerticalGroup));
-			textDebugPos[1] += 30;
-			draw_text(textDebugPos[0], textDebugPos[1], "Playing: " + string(isBreaking));
-			textDebugPos[1] += 30;
-			draw_text(textDebugPos[0], textDebugPos[1], "Considering Move: " + string(isConsideringMove));
-			textDebugPos[1] += 30;
-			draw_text(textDebugPos[0], textDebugPos[1], "Moving: " + string(isMoving));
-			textDebugPos[1] += 30;
-			draw_text(textDebugPos[0], textDebugPos[1], "Swapping partner: " + string(swappingPartner));
-			textDebugPos[1] += 30;
-			draw_text(textDebugPos[0], textDebugPos[1], "Depth: " + string(depth));
+if(obj_game.debugMode){
+	for(var i = 0; i < ds_grid_height(playGrid); i++){
+		for(var j = 0; j < ds_grid_width(playGrid); j++){
+			draw_text(64 * j, 64 * i, string_replace(string(playGrid[# j, i]), "ref instance 100", ""));
+		}
+	}
+	draw_text(textDebugPos[0], textDebugPos[1], "Hover Tile " + string_replace(string(tileHovered), "ref instance 100", ""));
+	textDebugPos[1] += 30;
+	draw_text(textDebugPos[0], textDebugPos[1], "Selected Tile: " + string_replace(string(tileSelected), "ref instance 100", ""));
+	textDebugPos[1] += 30;
+	
+	if(IsOutOfGrid(mouseGridPosition, obj_board.playGrid)){ return; }
+	
+	var cellContent = obj_board.playGrid[# mouseGridPosition[0], mouseGridPosition[1]];
+	draw_text(textDebugPos[0], textDebugPos[1], "Mouse Grid Pos: " + string(mouseGridPosition));
+	textDebugPos[1] += 30;
+	draw_text(textDebugPos[0], textDebugPos[1], "Grid element: " + string_replace(string(cellContent), "ref instance 100", ""));
+	textDebugPos[1] += 30;
+	
+	if(cellContent != -1){
+		with(cellContent){
+			if(isHover){
+				
+				draw_text(textDebugPos[0], textDebugPos[1], "Current Type: " + string(tileType));
+				textDebugPos[1] += 30;
+				draw_text(textDebugPos[0], textDebugPos[1], "Current Pos: " + string(tileGridPos));
+				textDebugPos[1] += 30;
+				draw_text(textDebugPos[0], textDebugPos[1], "Next Pos: " + string(tileGridPosNext));
+				textDebugPos[1] += 30;
+				draw_text(textDebugPos[0], textDebugPos[1], "Hover: " + string(isHover));
+				textDebugPos[1] += 30;
+				draw_text(textDebugPos[0], textDebugPos[1], "Selected: " + string(isSelected));
+				textDebugPos[1] += 30;
+				draw_text(textDebugPos[0], textDebugPos[1], "Ready to play: " + string(isReadyForPlay));
+				textDebugPos[1] += 30;
+				draw_text(textDebugPos[0], textDebugPos[1], "H: " + string(isHorizontalGroup) +   "V: " + string(isVerticalGroup));
+				textDebugPos[1] += 30;
+				draw_text(textDebugPos[0], textDebugPos[1], "Playing: " + string(isBreaking));
+				textDebugPos[1] += 30;
+				draw_text(textDebugPos[0], textDebugPos[1], "Considering Move: " + string(isConsideringMove));
+				textDebugPos[1] += 30;
+				draw_text(textDebugPos[0], textDebugPos[1], "Moving: " + string(isMoving));
+				textDebugPos[1] += 30;
+				draw_text(textDebugPos[0], textDebugPos[1], "Swapping partner: " + string(swappingPartner));
+				textDebugPos[1] += 30;
+				draw_text(textDebugPos[0], textDebugPos[1], "Depth: " + string(depth));
+			}
 		}
 	}
 }

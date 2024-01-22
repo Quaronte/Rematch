@@ -21,9 +21,13 @@ for(var i = 0; i < initialTiles; i++){
 function createGame(){
 	instance_create_depth(0, 0, 0, obj_camera);
 	instance_create_depth(0, 0, 0, obj_board);
+	instance_create_depth(700, 400, 0, obj_button);
 }
 
 createGame();
+
+//Debug variables
+debugMode = false;
 
 
 draw_set_font(fnt_debug);

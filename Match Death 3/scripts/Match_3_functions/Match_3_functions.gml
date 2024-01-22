@@ -112,10 +112,7 @@ function TryMakingSwap(_tileSelected){
 				// swappingPartner = -1;
 			}
 			//Comprobamos si tenemos que pasar al turno de los enemigos
-			obj_board.currentMoves++;
-			if(obj_board.currentMoves == obj_board.movesPerTurn){
-				obj_board.boardState = boardS.enemyTurn;	
-			}
+			obj_board.remainingMoves--;
 		}
 		return true;
 	}	

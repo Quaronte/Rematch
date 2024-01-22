@@ -7,6 +7,9 @@ boardState = boardS.playerTurn;
 
 playingMaxAnimationLength = 25;
 
+buttonHovered = -1;
+buttonSelected = -1;
+
 tileHovered = -1;
 tileSelected = -1;
 
@@ -36,6 +39,6 @@ for(var i = 0; i < initialDeckSize; i++){
 CheckGroups();	
 movesPerTurn = 3;
 
-currentMoves = 0;
+remainingMoves = movesPerTurn;
 
 
