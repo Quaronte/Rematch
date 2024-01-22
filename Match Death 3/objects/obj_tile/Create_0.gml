@@ -24,6 +24,7 @@ fallTime = 1;
 
 isConsideringMove = false;
 consideringMoveCounter = true;
+isMoving = false;
 
 swappingPartner = -1;
 
@@ -31,5 +32,5 @@ isReadyForPlay = false;
 isVerticalGroup = true;
 isHorizontalGroup = true;
 
-isPlaying = false;
+isBreaking = false;
 playingCounter = 0;

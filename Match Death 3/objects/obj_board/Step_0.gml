@@ -4,37 +4,38 @@
 
 if(keyboard_check_pressed(vk_space)){
 	repeat(3){
-		createTileTopRandomPos(irandom(tileT.energy));
+		CreateTileTopRandomPos(irandom(tileT.energy));
 	}
 }
 
 switch(boardState){
 	case boardS.playerTurn:
-		checkHover();
-		checkSelected();
+		CheckHover();
+		CheckSelected();
 
 		if(tileSelected != -1){
-			trySwapping();
+			TrySwapping();
 		}
 
 
-		if(isPlaying){
+		if(isGroupBreaking){
 			playingCounter++;
 			if(playingCounter >= playingMaxAnimationLength){
+				
 				with(obj_tile){
-					if(isPlaying){
+					if(isBreaking){
 						obj_board.playGrid[# tileGridPos[0], tileGridPos[1]] = -1;
-						obj_board.tileHovered = -1;
-						obj_board.tileSelected = -1;
 						instance_destroy();
+						obj_board.tileSelected = obj_board.tileSelected == id ? -1 : obj_board.tileSelected;
+						obj_board.tileHovered = obj_board.tileHovered == id ? -1 : obj_board.tileHovered;
 					}
 				}
 				playingCounter = 0;
-				isPlaying = false;
-				checkAllTilesFall();
-				checkGroups();	
+				isGroupBreaking = false;
+				CheckAllTilesFall();
+				CheckGroups();	
 			}
-			//tileGamePos = [smoothLerp(tileGridPos[0], tileGridPosNext[0], anc_fall, "Fall", consideringMoveCounter), smoothLerp(tileGridPos[1], tileGridPosNext[1], anc_fall, "Fall", consideringMoveCounter)];
+			//tileGamePos = [SmoothLerp(tileGridPos[0], tileGridPosNext[0], anc_fall, "Fall", consideringMoveCounter), SmoothLerp(tileGridPos[1], tileGridPosNext[1], anc_fall, "Fall", consideringMoveCounter)];
 
 		}
 	break;
@@ -42,7 +43,7 @@ switch(boardState){
 		boardState = boardS.playerTurn;	
 		currentMoves = 0;
 		repeat(5){
-			createTileTopRandomPos(irandom(tileT.energy));
+			CreateTileTopRandomPos(irandom(tileT.energy));
 		}
 	break;
 }

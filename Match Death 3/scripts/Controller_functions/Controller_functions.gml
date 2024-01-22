@@ -3,7 +3,7 @@
 
 enum dir {right = 0, up = 90, left = 180, down =270}
 
-function checkHover(){
+function CheckHover(){
 	var objectOnMouse = collision_point(mouse_x, mouse_y, obj_tile, false, true);
 
 	if(objectOnMouse == noone){
@@ -23,7 +23,7 @@ function checkHover(){
 	}
 }
 
-function checkSelected(){
+function CheckSelected(){
 	if(mouse_check_button_pressed(mb_left)){
 		var objectOnMouse = collision_point(mouse_x, mouse_y, obj_tile, false, true);
 
@@ -33,22 +33,26 @@ function checkSelected(){
 	
 		if(objectOnMouse.object_index == obj_tile){
 			if(objectOnMouse.isReadyForPlay == true){
-				breakGroup(objectOnMouse);
-				isPlaying = true;
+				if(!isGroupBreaking){
+					BreakGroup(objectOnMouse);
+					isGroupBreaking = true;
+				}
 				return;
 			}
-			tileSelected = objectOnMouse;
-			tileSelected.isSelected = true;
-			tileSelected.depth = -100;
+			if(objectOnMouse.fallCounter == 1){
+				tileSelected = objectOnMouse;
+				tileSelected.isSelected = true;
+				tileSelected.depth = -100;
+			}
 		}
 	}
 	
 	if(mouse_check_button_released(mb_left)){
 		var _updateBoard = false;
 		if(tileSelected != -1){
-			if(tryMakingSwap(tileSelected)){
-				checkAllTilesFall();
-				checkGroups();	
+			if(TryMakingSwap(tileSelected)){
+				CheckAllTilesFall();
+				CheckGroups();	
 			}
 			tileSelected = -1;
 		}

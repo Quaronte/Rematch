@@ -10,7 +10,7 @@ playingMaxAnimationLength = 25;
 tileHovered = -1;
 tileSelected = -1;
 
-isPlaying = false;
+isGroupBreaking = false;
 playingCounter = 0;
 
 playGrid = ds_grid_create(5, 10);
@@ -28,12 +28,12 @@ ds_list_shuffle(playingDeck);
 
 var initialDeckSize = ds_list_size(playingDeck);
 for(var i = 0; i < initialDeckSize; i++){
-	createTileTopRandomPos(playingDeck[| 0]);
+	CreateTileTopRandomPos(playingDeck[| 0]);
 	ds_list_add(discardedDeck, playingDeck[| 0]);
 	ds_list_delete(playingDeck, 0);
 }
 
-checkGroups();	
+CheckGroups();	
 movesPerTurn = 3;
 
 currentMoves = 0;

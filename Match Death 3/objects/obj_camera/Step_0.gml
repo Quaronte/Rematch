@@ -9,4 +9,4 @@ if(bounceCounter > 0){
 }
 
 
-camera_set_view_pos(view_camera[0], -100, -100 + offsetPos[1]*smoothLerp(0, 1, anc_fall, "CameraShake", bounceCounter));
+camera_set_view_pos(view_camera[0], -100, -100 + offsetPos[1]*SmoothLerp(0, 1, anc_fall, "CameraShake", bounceCounter));

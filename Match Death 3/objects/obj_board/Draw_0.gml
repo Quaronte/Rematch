@@ -23,22 +23,29 @@ for(var i = 0; i < ds_grid_height(playGrid); i++){
 }
 
 
-var mouseGridPosition = getGridMousePosition();
+var mouseGridPosition = GetGridMousePosition();
 var textDebugPos = [64*9, -20];
 draw_text(textDebugPos[0], textDebugPos[1], "Current Moves: " + string(currentMoves));
 textDebugPos[1] += 30;
+draw_text(textDebugPos[0], textDebugPos[1], "Hover Tile " + string(tileHovered));
+textDebugPos[1] += 30;
+draw_text(textDebugPos[0], textDebugPos[1], "Selected Tile: " + string(tileSelected));
+textDebugPos[1] += 30;
 
-if(isOutOfGrid(mouseGridPosition, obj_board.playGrid)){ return; }
+if(IsOutOfGrid(mouseGridPosition, obj_board.playGrid)){ return; }
 
 var cellContent = obj_board.playGrid[# mouseGridPosition[0], mouseGridPosition[1]];
 draw_text(textDebugPos[0], textDebugPos[1], "Mouse Grid Pos: " + string(mouseGridPosition));
 textDebugPos[1] += 30;
 draw_text(textDebugPos[0], textDebugPos[1], "Grid element: " + string(cellContent));
 textDebugPos[1] += 30;
+
 if(cellContent != -1){
 	with(cellContent){
 		if(isHover){
 			
+			draw_text(textDebugPos[0], textDebugPos[1], "Current Type: " + string(tileType));
+			textDebugPos[1] += 30;
 			draw_text(textDebugPos[0], textDebugPos[1], "Current Pos: " + string(tileGridPos));
 			textDebugPos[1] += 30;
 			draw_text(textDebugPos[0], textDebugPos[1], "Next Pos: " + string(tileGridPosNext));
@@ -51,9 +58,11 @@ if(cellContent != -1){
 			textDebugPos[1] += 30;
 			draw_text(textDebugPos[0], textDebugPos[1], "H: " + string(isHorizontalGroup) +   "V: " + string(isVerticalGroup));
 			textDebugPos[1] += 30;
-			draw_text(textDebugPos[0], textDebugPos[1], "Playing: " + string(isPlaying));
+			draw_text(textDebugPos[0], textDebugPos[1], "Playing: " + string(isBreaking));
 			textDebugPos[1] += 30;
 			draw_text(textDebugPos[0], textDebugPos[1], "Considering Move: " + string(isConsideringMove));
+			textDebugPos[1] += 30;
+			draw_text(textDebugPos[0], textDebugPos[1], "Moving: " + string(isMoving));
 			textDebugPos[1] += 30;
 			draw_text(textDebugPos[0], textDebugPos[1], "Swapping partner: " + string(swappingPartner));
 			textDebugPos[1] += 30;
