@@ -1,2 +1,2 @@
 
-//if()
+event_inherited();

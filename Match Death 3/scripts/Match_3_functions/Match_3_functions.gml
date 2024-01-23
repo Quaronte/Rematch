@@ -31,7 +31,7 @@ function TrySwapping(){
 	
 	
 	//show_debug_message("Mouse Position" + string(mouseGridPosition));
-	with(tileSelected){
+	with(clickableSelected){
 		if(isMoving){
 			consideringMoveCounter = 0;
 			tileGridPos = [tileGridPosNext[0] , tileGridPosNext[1]];
@@ -88,8 +88,8 @@ function TrySwapping(){
 	}
 }
 	
-function TryMakingSwap(_tileSelected){
-	with(_tileSelected){
+function TryMakingSwap(_tileSwapping){
+	with(_tileSwapping){
 		//Apagamos la casilla
 		isSelected = false;
 		depth = 0;
@@ -195,40 +195,43 @@ function CheckAndMarkGroup(_i, _j, _currentStreak, _groupSize, _isVertical){
 	}
 }
 
-function BreakGroup(_startingTile){
-	var tilesToCheck = ds_stack_create();
-	ds_stack_push(tilesToCheck, _startingTile);
-	var counterDestroy = 0;
-	var _nextTile = 0;
-	while(!ds_stack_empty(tilesToCheck)){
-		counterDestroy++;
-		with(ds_stack_pop(tilesToCheck)){
-			isBreaking = true;
-			if(isVerticalGroup){
-				isVerticalGroup = false;
-				for(var i = 90; i < 360; i+= 180){
-					_nextTile = FindTileInDirection(tileGridPos[0], tileGridPos[1], i, 1, obj_board.playGrid);
-					if(_nextTile != -1){
-						if(_nextTile.isVerticalGroup && _nextTile.tileType == _startingTile.tileType){
-							ds_stack_push(tilesToCheck, _nextTile);
+function TryBreakingGroup(_startingTile){
+	if(!isGroupBreaking && _startingTile.isReadyForPlay == true){
+		isGroupBreaking = true;
+		
+		var tilesToCheck = ds_stack_create();
+		ds_stack_push(tilesToCheck, _startingTile);
+		var counterDestroy = 0;
+		var _nextTile = 0;
+		while(!ds_stack_empty(tilesToCheck)){
+			counterDestroy++;
+			with(ds_stack_pop(tilesToCheck)){
+				isBreaking = true;
+				if(isVerticalGroup){
+					isVerticalGroup = false;
+					for(var i = 90; i < 360; i+= 180){
+						_nextTile = FindTileInDirection(tileGridPos[0], tileGridPos[1], i, 1, obj_board.playGrid);
+						if(_nextTile != -1){
+							if(_nextTile.isVerticalGroup && _nextTile.tileType == _startingTile.tileType){
+								ds_stack_push(tilesToCheck, _nextTile);
+							}
 						}
 					}
 				}
-			}
-			if(isHorizontalGroup){
-				isHorizontalGroup = false;
-				for(var i = 0; i < 360; i+= 180){
-					_nextTile = FindTileInDirection(tileGridPos[0], tileGridPos[1], i, 1, obj_board.playGrid);
-					if(_nextTile != -1){
-						if(_nextTile.isHorizontalGroup && _nextTile.tileType == _startingTile.tileType){
-							ds_stack_push(tilesToCheck, _nextTile);
+				if(isHorizontalGroup){
+					isHorizontalGroup = false;
+					for(var i = 0; i < 360; i+= 180){
+						_nextTile = FindTileInDirection(tileGridPos[0], tileGridPos[1], i, 1, obj_board.playGrid);
+						if(_nextTile != -1){
+							if(_nextTile.isHorizontalGroup && _nextTile.tileType == _startingTile.tileType){
+								ds_stack_push(tilesToCheck, _nextTile);
+							}
 						}
 					}
 				}
 			}
 		}
 	}
-	ShowDebug("Destruyendo", counterDestroy, "piezas.");
 }
 	
 #endregion
@@ -278,8 +281,8 @@ function CheckAllTilesFall(){
 			if(obj_board.playGrid[# j, i] != -1){
 				with(obj_board.playGrid[# j, i]){
 					if(CheckTileFall()){
-						isSelected = -1;
-						obj_board.tileSelected = obj_board.tileSelected == id ? -1 : obj_board.tileSelected;	
+						isSelected = false;
+						obj_board.clickableSelected = obj_board.clickableSelected == id ? -1 : obj_board.clickableSelected;	
 					}
 				}
 			}

@@ -4,86 +4,42 @@
 enum dir {right = 0, up = 90, left = 180, down =270}
 
 function CheckHover(){
-	var objectOnMouse = collision_point(mouse_x, mouse_y, obj_tile, false, true);
+	var objectOnMouse = collision_point(mouse_x, mouse_y, obj_clickable, false, true);
 
-	if(objectOnMouse == noone){
-		if(tileHovered != -1){
-			tileHovered.isHover = false;
-			tileHovered = -1;
+	if(objectOnMouse == noone){	
+		if(clickableHovered != -1){
+			if(clickableHovered.clickableFunctionOnDehover == -1){ return; }
+			script_execute(clickableHovered.clickableFunctionOnDehover, clickableHovered);
 		}
-		if(buttonHovered != -1){
-			buttonHovered.isHover = false;
-			buttonHovered = -1;
-		}
-		return;
+		return;	
 	}
-	switch(objectOnMouse.object_index){
-		case obj_tile:
-				objectOnMouse.isHover = true;
-				if(tileHovered != objectOnMouse && tileHovered != -1){
-					tileHovered.isHover = false;
-				}
-				tileHovered = objectOnMouse;
-			break;
-		case obj_button:
-			with(objectOnMouse){
-				script_execute(ButtonOnHover);
-			}
-			break;
-	}
+	if(objectOnMouse.clickableFunctionOnHover == -1){ return; }
 	
+	script_execute(objectOnMouse.clickableFunctionOnHover, objectOnMouse);
 }
 
 function CheckSelected(){
 	if(mouse_check_button_pressed(mb_left)){
-		var objectOnMouse = collision_point(mouse_x, mouse_y, obj_tile, false, true);
-
-		if(objectOnMouse == noone){
-			return;
-		}
-		switch(objectOnMouse.object_index){
-			case obj_tile:
-				if(objectOnMouse.isReadyForPlay == true){
-					if(!isGroupBreaking){
-						BreakGroup(objectOnMouse);
-						isGroupBreaking = true;
-					}
-					return;
-				}
-				if(objectOnMouse.fallCounter == 1 && obj_board.remainingMoves > 0){
-					tileSelected = objectOnMouse;
-					tileSelected.isSelected = true;
-					tileSelected.depth = -100;
-				}
-			break;
-			case obj_button:
-				ShowDebug("Intentando seleccionar ratón");
-				with(objectOnMouse){
-					ShowDebug("Por lo menos existe");
-					script_execute(ButtonOnSelect);
-				}
-				break;
-		}
-	}
-	
-	if(mouse_check_button_released(mb_left)){
-		var _updateBoard = false;
-		if(tileSelected != -1){
-			if(TryMakingSwap(tileSelected)){
-				CheckAllTilesFall();
-				CheckGroups();	
-			}
-			tileSelected = -1;
-		}
-		if(buttonSelected != -1){
-			with(buttonSelected){
-				script_execute(ButtonOnDeselect);
-			}
-		}
+		var objectOnMouse = collision_point(mouse_x, mouse_y, obj_clickable, false, true);
+		ShowDebug("Trying to Select", objectOnMouse);
+		if(objectOnMouse == noone){	return; }
+		if(objectOnMouse.clickableFunctionOnSelect == -1){ return; }
+		ShowDebug("Selecting", objectOnMouse);
+			
+		script_execute(objectOnMouse.clickableFunctionOnSelect, objectOnMouse);
+		
 	}
 }
 
-
+function CheckRelease(){
+	if(mouse_check_button_released(mb_left)){
+		var _updateBoard = false;
+		if(clickableSelected == -1){ return; }
+		if(clickableSelected.clickableFunctionOnRelease == -1){ return; }
+		script_execute(clickableSelected.clickableFunctionOnRelease, clickableSelected);
+		clickableSelected = -1;
+	}
+}
 
 
 

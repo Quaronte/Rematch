@@ -1,24 +1,31 @@
 
-function ButtonOnHover() {
-    isHover = true;
-	if(obj_board.buttonHovered != id && obj_board.buttonHovered != -1){
-		buttonHovered.isHover = false;
+function ButtonOnHover(_object) {
+    _object.isHover = true;
+	if(obj_board.clickableHovered != _object && obj_board.clickableHovered != -1){
+		clickableHovered.isHover = false;
 	}
-	buttonHovered = id;
+	clickableHovered = _object;
+	_object.hoverAnim = [anc_effects, "HoverOn"];
 }
 
-function ButtonOnDeselect() {
-    isSelected = false;
+function ButtonOnDehover(_object) {
+    _object.isHover = false;
+	_object.hoverAnim = [anc_effects, "HoverOff"];
+	obj_board.clickableHovered = -1;
 }
 
-function ButtonOnSelect() {
-    isSelected = true;
-    
-    script_execute(buttonSelectScript);
-    showDebug("Boton seleccionado");
+
+function ButtonOnSelect(_object) {
+    _object.isSelected = true;
+    script_execute(_object.buttonSelectScript);
 }
+
+function ButtonOnRelease(_object) {
+    _object.isSelected = false;
+}
+
 
 function ButtonEndTurn() {
     obj_board.boardState = boardS.enemyTurn;
-    showDebug("Cambiando estado");
+    ShowDebug("Cambiando estado");
 }

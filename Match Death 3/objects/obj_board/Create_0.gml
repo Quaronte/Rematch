@@ -7,11 +7,8 @@ boardState = boardS.playerTurn;
 
 playingMaxAnimationLength = 25;
 
-buttonHovered = -1;
-buttonSelected = -1;
-
-tileHovered = -1;
-tileSelected = -1;
+clickableHovered = -1;
+clickableSelected = -1;
 
 isGroupBreaking = false;
 playingCounter = 0;

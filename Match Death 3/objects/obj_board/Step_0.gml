@@ -12,8 +12,10 @@ switch(boardState){
 	case boardS.playerTurn:
 		CheckHover();
 		CheckSelected();
-
-		if(tileSelected != -1){
+		CheckRelease();
+		
+		//WARNING
+		if(clickableSelected != -1){
 			TrySwapping();
 		}
 
@@ -26,8 +28,8 @@ switch(boardState){
 					if(isBreaking){
 						obj_board.playGrid[# tileGridPos[0], tileGridPos[1]] = -1;
 						instance_destroy();
-						obj_board.tileSelected = obj_board.tileSelected == id ? -1 : obj_board.tileSelected;
-						obj_board.tileHovered = obj_board.tileHovered == id ? -1 : obj_board.tileHovered;
+						obj_board.clickableSelected = obj_board.clickableSelected == id ? -1 : obj_board.clickableSelected;
+						obj_board.clickableHovered = obj_board.clickableHovered == id ? -1 : obj_board.clickableHovered;
 					}
 				}
 				playingCounter = 0;

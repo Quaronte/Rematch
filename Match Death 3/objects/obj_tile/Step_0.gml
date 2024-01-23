@@ -1,8 +1,7 @@
 /// @description Insert description here
 // You can write your code in this editor
 
-
-
+event_inherited();
 
 Fall();
 
@@ -10,15 +9,6 @@ Fall();
 x = tileGamePos[0] * sprite_get_height(spr_tiles);
 y = tileGamePos[1] * sprite_get_height(spr_tiles);
 
-if(isHover){
-	hoverCounter = min(hoverCounter + 1/8, 1);
-	hoverScale = SmoothLerp(0, 1, anc_effects, "HoverOn", hoverCounter);
-	
-}
-else{
-	hoverCounter = max(hoverCounter - 1/25, 0);
-	hoverScale = SmoothLerp(0, 1, anc_effects, "HoverOff", hoverCounter);
-}
 
 
 if(isConsideringMove || isMoving){

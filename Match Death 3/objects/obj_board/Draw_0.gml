@@ -7,8 +7,12 @@ with(obj_tile){
 	}		
 }
 
-if(tileSelected != -1){
-	with(tileSelected){
+with(obj_button){
+	draw_sprite_ext(spr_button, buttonType, x, y, 1 + 0.1*hoverScale, 1 + 0.1*hoverScale, 0, c_white, 1);
+}
+
+if(clickableSelected != -1){
+	with(clickableSelected){
 		draw_sprite_ext(spr_tiles, tileType, x, y, 1 + 0.1*hoverScale, 1 + 0.1*hoverScale, tileAngle + 5*dcos(playingCounter*900), c_white, 1);
 		draw_sprite_ext(spr_selected, 0, x, y, 1 + 0.1*hoverScale, 1 + 0.1*hoverScale, tileAngle + 5*dcos(playingCounter*900), c_white, 1);
 	}
@@ -28,9 +32,9 @@ if(obj_game.debugMode){
 			draw_text(64 * j, 64 * i, string_replace(string(playGrid[# j, i]), "ref instance 100", ""));
 		}
 	}
-	draw_text(textDebugPos[0], textDebugPos[1], "Hover Tile " + string_replace(string(tileHovered), "ref instance 100", ""));
+	draw_text(textDebugPos[0], textDebugPos[1], "Hover Tile " + string_replace(string(clickableHovered), "ref instance 100", ""));
 	textDebugPos[1] += 30;
-	draw_text(textDebugPos[0], textDebugPos[1], "Selected Tile: " + string_replace(string(tileSelected), "ref instance 100", ""));
+	draw_text(textDebugPos[0], textDebugPos[1], "Selected Tile: " + string_replace(string(clickableSelected), "ref instance 100", ""));
 	textDebugPos[1] += 30;
 	
 	if(IsOutOfGrid(mouseGridPosition, obj_board.playGrid)){ return; }
