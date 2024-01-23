@@ -41,10 +41,13 @@ switch(boardState){
 		}
 	break;
 	case boardS.enemyTurn:
-		boardState = boardS.playerTurn;	
-		remainingMoves = obj_board.movesPerTurn;
-		repeat(5){
-			CreateTileTopRandomPos(irandom(tileT.energy));
+		if(!ExecuteEnemyStack()){
+			ShowDebug("No quedan enemigos por actualizar");
+			boardState = boardS.playerTurn;	
+			remainingMoves = obj_board.movesPerTurn;
+			repeat(5){
+				CreateTileTopRandomPos(irandom(tileT.energy));
+			}
 		}
 	break;
 }

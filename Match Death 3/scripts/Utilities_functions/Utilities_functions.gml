@@ -13,11 +13,14 @@ function SmoothLerp(value1, value2, anc_curve, index, counter){
 	return lerp(value1, value2, _smoothCounter);
 }
 
-function FindTileInDirection(_x, _y, _dir, _distance, _grid){
-	show_debug_message("_pos" + string(_x) + ", " + string(_y));
-	var _nextPos = [_x + round(dcos(_dir)*_distance), _y - round(dsin(_dir)*_distance)];
-	show_debug_message("_NextPos" + string(_nextPos) + "  gridValue" + string(_grid[# _nextPos[0], _nextPos[1]]));
-	if(IsOutOfGrid(_nextPos, _grid)){ return -1; }
+function FindPosInDirection(_pos, _dir, _distance, _grid){
+	var _nextPos = [_pos[0] + round(dcos(_dir)*_distance), _pos[1] - round(dsin(_dir)*_distance)];
+	return _nextPos;
+}
+
+function FindCellInDirection(_pos, _dir, _distance, _grid){
+	var _nextPos = [_pos[0] + round(dcos(_dir)*_distance), _pos[1] - round(dsin(_dir)*_distance)];
+	if(IsOutOfGrid(_nextPos, _grid)){ return -2; }
 	
 	return _grid[# _nextPos[0], _nextPos[1]];
 }

@@ -7,6 +7,7 @@ view_camera[0] = camera_create_view(0, 0, 1366, 768);
 //camera_set_view_mat(view_camera[0], viewmat);
 //camera_set_proj_mat(view_camera[0], projmat);
 
+
 camera_set_view_pos(view_camera[0], -100, -100);
 
 offsetPos = [0, 0];

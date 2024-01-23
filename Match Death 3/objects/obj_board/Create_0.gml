@@ -16,12 +16,19 @@ playingCounter = 0;
 playGrid = ds_grid_create(5, 10);
 ds_grid_clear(playGrid, -1);
 
+enemyGridOffset = [6, 0];
+
 enemyGrid = ds_grid_create(5, 10);
 ds_grid_clear(enemyGrid, -1);
 
 
 playingDeck = ds_list_create();
 discardedDeck = ds_list_create();
+
+
+enemyStack = ds_stack_create();
+enemyStackDelay = 10;
+enemyStackDelayCounter = 0;
 
 ds_list_copy(playingDeck, obj_game.deck);
 ds_list_shuffle(playingDeck);
@@ -34,6 +41,10 @@ for(var i = 0; i < initialDeckSize; i++){
 }
 
 CheckGroups();	
+
+repeat(5){
+	CreateEnemy(irandom(enemyT.enemy2));
+}
 movesPerTurn = 3;
 
 remainingMoves = movesPerTurn;

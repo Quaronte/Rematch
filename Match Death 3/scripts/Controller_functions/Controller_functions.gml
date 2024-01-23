@@ -21,10 +21,8 @@ function CheckHover(){
 function CheckSelected(){
 	if(mouse_check_button_pressed(mb_left)){
 		var objectOnMouse = collision_point(mouse_x, mouse_y, obj_clickable, false, true);
-		ShowDebug("Trying to Select", objectOnMouse);
 		if(objectOnMouse == noone){	return; }
 		if(objectOnMouse.clickableFunctionOnSelect == -1){ return; }
-		ShowDebug("Selecting", objectOnMouse);
 			
 		script_execute(objectOnMouse.clickableFunctionOnSelect, objectOnMouse);
 		

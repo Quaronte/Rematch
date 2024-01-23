@@ -1,19 +1,4 @@
 
-function ButtonOnHover(_object) {
-    _object.isHover = true;
-	if(obj_board.clickableHovered != _object && obj_board.clickableHovered != -1){
-		clickableHovered.isHover = false;
-	}
-	clickableHovered = _object;
-	_object.hoverAnim = [anc_effects, "HoverOn"];
-}
-
-function ButtonOnDehover(_object) {
-    _object.isHover = false;
-	_object.hoverAnim = [anc_effects, "HoverOff"];
-	obj_board.clickableHovered = -1;
-}
-
 
 function ButtonOnSelect(_object) {
     _object.isSelected = true;
@@ -27,5 +12,5 @@ function ButtonOnRelease(_object) {
 
 function ButtonEndTurn() {
     obj_board.boardState = boardS.enemyTurn;
-    ShowDebug("Cambiando estado");
+    FillEnemyStack();
 }

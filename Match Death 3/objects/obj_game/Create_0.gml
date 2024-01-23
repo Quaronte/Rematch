@@ -21,7 +21,7 @@ for(var i = 0; i < initialTiles; i++){
 function createGame(){
 	instance_create_depth(0, 0, 0, obj_camera);
 	instance_create_depth(0, 0, 0, obj_board);
-	instance_create_depth(700, 400, 0, obj_button);
+	instance_create_depth(-2*sprite_get_width(spr_tiles), 9*sprite_get_height(spr_tiles), 0, obj_button);
 }
 
 createGame();
@@ -30,6 +30,6 @@ createGame();
 debugMode = false;
 
 
-draw_set_font(fnt_debug);
-draw_set_halign(fa_left);
+draw_set_font(fnt_game);
+draw_set_halign(fa_middle);
 draw_set_valign(fa_middle);

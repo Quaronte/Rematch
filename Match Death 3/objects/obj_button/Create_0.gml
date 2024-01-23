@@ -4,8 +4,8 @@ event_inherited();
 
 enum buttonT{endTurn}
 
-clickableFunctionOnHover	= ButtonOnHover;
-clickableFunctionOnDehover	= ButtonOnDehover;
+clickableFunctionOnHover	= BasicOnHover;
+clickableFunctionOnDehover	= BasicOnDehover;
 clickableFunctionOnSelect	= ButtonOnSelect;
 clickableFunctionOnRelease	= ButtonOnRelease;
 

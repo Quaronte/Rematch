@@ -1,6 +1,5 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-function TileOnHover(_object){
+
+function BasicOnHover(_object){
 	_object.isHover = true;
 	if(obj_board.clickableHovered != _object && obj_board.clickableHovered != -1){
 		clickableHovered.isHover = false;
@@ -9,7 +8,7 @@ function TileOnHover(_object){
 	_object.hoverAnim = [anc_effects, "HoverOn"];
 }
 
-function TileOnDehover(_object){
+function BasicOnDehover(_object){
 	_object.isHover = false;
 	_object.hoverAnim = [anc_effects, "HoverOff"];
 	obj_board.clickableHovered = -1;

@@ -3,10 +3,10 @@
 
 event_inherited();
 
-enum tileT{melee, shield, range, magic, energy, death};
+enum tileT{melee, shield, range, magic, death, energy};
 
-clickableFunctionOnHover	= TileOnHover;
-clickableFunctionOnDehover	= TileOnDehover;
+clickableFunctionOnHover	= BasicOnHover;
+clickableFunctionOnDehover	= BasicOnDehover;
 clickableFunctionOnSelect	= TileOnSelect;
 clickableFunctionOnRelease	= TileOnRelease;
 
@@ -15,7 +15,7 @@ tileType = 0;
 tileGridPosNext = [-1, -1];
 tileGridPos = [-1, -1];
 tileGamePos = [-1, -1];
-tileAngle = random_range(-3, 3);
+tileAngle = random_range(-4, 4);
 
 
 
