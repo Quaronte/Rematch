@@ -17,7 +17,7 @@ tileGridPos = [-1, -1];
 tileGamePos = [-1, -1];
 tileAngle = random_range(-4, 4);
 
-
+tileGroup = -1;
 
 fallCounter = 1;
 fallTime = 1;

@@ -16,7 +16,7 @@ function BasicOnDehover(_object){
 
 function TileOnSelect(_object){
 	
-	if(TryBreakingGroup(_object)){ return; }
+	if(TryBreakingGroup(_object.tileGroup)){ return; }
 	
 	if(_object.fallCounter == 1 && obj_board.remainingMoves > 0){
 		obj_board.clickableSelected = _object;

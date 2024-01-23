@@ -186,6 +186,8 @@ function CheckGroups(){
 		_currentStreak = 0;
 		_currentType = -2;
 	}
+	ShowDebug("A identificar grupos");
+	IdentifyAllGroups();
 }
 
 function CheckAndMarkGroup(_i, _j, _currentStreak, _groupSize, _isVertical){
@@ -200,36 +202,58 @@ function CheckAndMarkGroup(_i, _j, _currentStreak, _groupSize, _isVertical){
 	}
 }
 
+function ClearAllGroups(){
+	for(var i = 0; i < ds_list_size(obj_board.availableGroupsList); i++){
+		delete obj_board.availableGroupsList[| i];
+	}
+	ds_list_clear(obj_board.availableGroupsList);
+	with(obj_tile){
+		tileGroup = -1;
+	}
+}
 
+function IdentifyAllGroups(){
+	ClearAllGroups();
+	var _group = 0;
+	with(obj_tile){
+		if(isReadyForPlay && tileGroup = -1){
+			IdentifyGroup(id, _group);
+			_group++;
+		}
+	}
+}
 
-function TryBreakingGroup(_startingTile){
-	if(isGroupBreaking || _startingTile.isReadyForPlay != true){ return false; }
-		
-	isGroupBreaking = true;
-	
+function IdentifyGroup(_startingTile, _group){
 	var tilesToCheck = ds_stack_create();
 	ds_stack_push(tilesToCheck, _startingTile);
-	var counterDestroy = 0;
+	var _counterDestroy = 0;
 	var _nextTile = 0;
+	var _groupProperties = [0, 0];
+	var _isPartOfTheGroup = false;
 	while(!ds_stack_empty(tilesToCheck)){
-		counterDestroy++;
+		_counterDestroy++;
+		_isPartOfTheGroup = false;
 		with(ds_stack_pop(tilesToCheck)){
-			isBreaking = true;
-			if(isVerticalGroup){
-				isVerticalGroup = false;
+			ShowDebug("Comprobamos con vertical ", isVerticalGroup, "y tamaño de grupo", tileGroup, _group);
+			if(isVerticalGroup && tileGroup != _group){
+				ShowDebug("Algo vertical");
+				_isPartOfTheGroup = true;
 				for(var i = 90; i < 360; i+= 180){
-					_nextTile = FindCellInDirection(tileGridPos, i, 1, obj_board.playGrid);
+					_nextTile = FindCellInDirection(tileGridPosNext, i, 1, obj_board.playGrid);
 					if(_nextTile != -1 && _nextTile != -2){
+						ShowDebug(i, "Estamos en una casilla no vacía", _nextTile.isVerticalGroup, "y tipos de tile next", _nextTile.tileType, "starting", _startingTile.tileType);
 						if(_nextTile.isVerticalGroup && _nextTile.tileType == _startingTile.tileType){
+							ShowDebug("Añadimos candidato");
 							ds_stack_push(tilesToCheck, _nextTile);
 						}
 					}
 				}
 			}
-			if(isHorizontalGroup){
-				isHorizontalGroup = false;
+			if(isHorizontalGroup && tileGroup != _group){
+				ShowDebug("Algo horizontal");
+				_isPartOfTheGroup = true;
 				for(var i = 0; i < 360; i+= 180){
-					_nextTile = FindCellInDirection(tileGridPos, i, 1, obj_board.playGrid);
+					_nextTile = FindCellInDirection(tileGridPosNext, i, 1, obj_board.playGrid);
 					if(_nextTile != -1 && _nextTile != -2){
 						if(_nextTile.isHorizontalGroup && _nextTile.tileType == _startingTile.tileType){
 							ds_stack_push(tilesToCheck, _nextTile);
@@ -237,11 +261,81 @@ function TryBreakingGroup(_startingTile){
 					}
 				}
 			}
+			if(_isPartOfTheGroup){
+				tileGroup = _group;
+			}
 		}
 	}
 	
+	//Añadimos 
+	ds_list_add(obj_board.availableGroupsList, new createGroup(_startingTile.tileType, _groupProperties, _counterDestroy));
+	ShowDebug("Identificados el grupo:", obj_board.availableGroupsList, "de tamaño", _counterDestroy);
 	return true;
 }
+
+function createGroup(_groupType, _properties, _totalNumber) constructor{
+	groupType = _groupType;
+	groupProperties = _properties;
+	groupTotalNumber = _totalNumber;
+	groupIntersections = (groupProperties[0] + groupProperties[1]) - groupTotalNumber;
+	
+}
+
+function TryBreakingGroup(_group){
+	if(isGroupBreaking || _group == -1){ return false; }
+		
+	isGroupBreaking = true;
+	
+	with(obj_tile){
+		if(tileGroup == _group){
+			isBreaking = true;
+			isVerticalGroup = false;
+			isHorizontalGroup = false;
+		}
+	}
+}
+
+
+// function TryBreakingGroup(_startingTile){
+// 	if(isGroupBreaking || _startingTile.isReadyForPlay != true){ return false; }
+		
+// 	isGroupBreaking = true;
+	
+// 	var tilesToCheck = ds_stack_create();
+// 	ds_stack_push(tilesToCheck, _startingTile);
+// 	var counterDestroy = 0;
+// 	var _nextTile = 0;
+// 	while(!ds_stack_empty(tilesToCheck)){
+// 		counterDestroy++;
+// 		with(ds_stack_pop(tilesToCheck)){
+// 			isBreaking = true;
+// 			if(isVerticalGroup){
+// 				isVerticalGroup = false;
+// 				for(var i = 90; i < 360; i+= 180){
+// 					_nextTile = FindCellInDirection(tileGridPos, i, 1, obj_board.playGrid);
+// 					if(_nextTile != -1 && _nextTile != -2){
+// 						if(_nextTile.isVerticalGroup && _nextTile.tileType == _startingTile.tileType){
+// 							ds_stack_push(tilesToCheck, _nextTile);
+// 						}
+// 					}
+// 				}
+// 			}
+// 			if(isHorizontalGroup){
+// 				isHorizontalGroup = false;
+// 				for(var i = 0; i < 360; i+= 180){
+// 					_nextTile = FindCellInDirection(tileGridPos, i, 1, obj_board.playGrid);
+// 					if(_nextTile != -1 && _nextTile != -2){
+// 						if(_nextTile.isHorizontalGroup && _nextTile.tileType == _startingTile.tileType){
+// 							ds_stack_push(tilesToCheck, _nextTile);
+// 						}
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+	
+// 	return true;
+// }
 	
 #endregion
 	

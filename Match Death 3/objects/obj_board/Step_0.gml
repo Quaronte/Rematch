@@ -8,12 +8,12 @@ if(keyboard_check_pressed(vk_space)){
 	}
 }
 
+CheckHover();
+CheckSelected();
+CheckRelease();
+
 switch(boardState){
 	case boardS.playerTurn:
-		CheckHover();
-		CheckSelected();
-		CheckRelease();
-		
 		//WARNING
 		if(clickableSelected != -1){
 			TrySwapping();
@@ -42,7 +42,6 @@ switch(boardState){
 	break;
 	case boardS.enemyTurn:
 		if(!ExecuteEnemyStack()){
-			ShowDebug("No quedan enemigos por actualizar");
 			boardState = boardS.playerTurn;	
 			remainingMoves = obj_board.movesPerTurn;
 			repeat(5){

@@ -21,6 +21,7 @@ enemyGridOffset = [6, 0];
 enemyGrid = ds_grid_create(5, 10);
 ds_grid_clear(enemyGrid, -1);
 
+availableGroupsList = ds_list_create();
 
 playingDeck = ds_list_create();
 discardedDeck = ds_list_create();

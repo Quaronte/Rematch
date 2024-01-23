@@ -66,15 +66,11 @@ if(obj_game.debugMode){
 		with(cellContent){
 			if(isHover){
 				
-				draw_text(textDebugPos[0], textDebugPos[1], "Current Type: " + string(tileType));
+				draw_text(textDebugPos[0], textDebugPos[1], "Current Type: " + string(tileType) + " / Current Group: " + string(tileGroup));
 				textDebugPos[1] += 30;
-				draw_text(textDebugPos[0], textDebugPos[1], "Current Pos: " + string(tileGridPos));
+				draw_text(textDebugPos[0], textDebugPos[1], "Pos: " + string(tileGridPos) + " -> " + string(tileGridPosNext));
 				textDebugPos[1] += 30;
-				draw_text(textDebugPos[0], textDebugPos[1], "Next Pos: " + string(tileGridPosNext));
-				textDebugPos[1] += 30;
-				draw_text(textDebugPos[0], textDebugPos[1], "Hover: " + string(isHover));
-				textDebugPos[1] += 30;
-				draw_text(textDebugPos[0], textDebugPos[1], "Selected: " + string(isSelected));
+				draw_text(textDebugPos[0], textDebugPos[1], "Hover: " + string(isHover) + " / Selected: " + string(isSelected));
 				textDebugPos[1] += 30;
 				draw_text(textDebugPos[0], textDebugPos[1], "Ready to play: " + string(isReadyForPlay));
 				textDebugPos[1] += 30;
