@@ -31,3 +31,12 @@ function TileOnRelease(_object){
 		CheckGroups();	
 	}
 }
+
+function GroupOnHover(_object){
+	_object.isHover = true;
+	if(obj_board.clickableHovered != _object && obj_board.clickableHovered != -1){
+		clickableHovered.isHover = false;
+	}
+	clickableHovered = _object;	
+	_object.hoverAnim = [anc_effects, "HoverOn"];
+}

@@ -1,11 +1,11 @@
 
 
-function CreateEnemy(_enemyType) {
-	var _pos = [-1, -1];
-    do{
-        _pos = [irandom(ds_grid_width(obj_board.enemyGrid) - 1), irandom_range(4, ds_grid_height(obj_board.enemyGrid) - 3)];
-    }until obj_board.enemyGrid[# _pos[0], _pos[1]] == -1;
-    
+function CreateEnemy(_enemyType, _pos) {
+	if(_pos == -1){
+	    do{
+	        _pos = [irandom(ds_grid_width(obj_board.enemyGrid) - 1), irandom_range(4, ds_grid_height(obj_board.enemyGrid) - 3)];
+	    }until obj_board.enemyGrid[# _pos[0], _pos[1]] == -1;
+	}
     with(instance_create_depth(0, 0, 0, obj_enemy)){
     	
         enemyGridPos = [_pos[0], _pos[1]];
@@ -41,6 +41,12 @@ function ChooseActionEnemy() {
 	
 	//Normal line
 	script_execute(enemyBasicActionScript);
+}
+
+
+function EnemyHit(_typeAttack, _powerAttack){
+	enemyHealth -= _powerAttack;
+	enemyHealthCounter = 1;
 }
 
 function FillEnemyStack(){

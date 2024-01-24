@@ -40,7 +40,7 @@ function ShowGridDebug(_grid){
 	var _currentString = "";
 	for(var i = 0; i < ds_grid_height(_grid); i++){
 		for(var j = 0; j < ds_grid_width(_grid); j++){
-			_currentString += "     " + string_replace(string(_grid[# j, i]), "ref instance 100", "");
+			_currentString += "     " + string_replace(string(_grid[# j, i]), "ref instance 10", "");
 		}
 		show_debug_message(_currentString);
 		_currentString = "";

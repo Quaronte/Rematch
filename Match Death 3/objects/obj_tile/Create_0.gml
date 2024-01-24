@@ -3,13 +3,15 @@
 
 event_inherited();
 
-enum tileT{melee, shield, range, magic, death, energy};
+enum tileT{melee, shield, range, magic, bomb, energy};
+enum attackT {melee, area, range, newTiles}
 
 clickableFunctionOnHover	= BasicOnHover;
 clickableFunctionOnDehover	= BasicOnDehover;
 clickableFunctionOnSelect	= TileOnSelect;
 clickableFunctionOnRelease	= TileOnRelease;
 
+tileIsFromDeck = true;
 
 tileType = 0;
 tileGridPosNext = [-1, -1];
@@ -34,4 +36,4 @@ isVerticalGroup = true;
 isHorizontalGroup = true;
 
 isBreaking = false;
-playingCounter = 0;
+breakingCounter = 0;

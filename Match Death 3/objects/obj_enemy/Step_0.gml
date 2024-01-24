@@ -17,3 +17,13 @@ enemyGamePos = [SmoothLerp(enemyGridPos[0], enemyGridPosNext[0], anc_fall, "Fall
 
 x = sprite_get_width(spr_tiles)*obj_board.enemyGridOffset[0] + enemyGamePos[0] * sprite_get_height(spr_tiles);
 y = enemyGamePos[1] * sprite_get_height(spr_tiles);
+
+if(enemyHealth != enemyCurrentHealth){
+    enemyHealthCounter -= 0.1;
+    if(enemyHealthCounter == 0){
+        enemyCurrentHealth = enemyHealth;
+        if(enemyCurrentHealth <= 0){
+            instance_destroy();
+        }
+    }
+}

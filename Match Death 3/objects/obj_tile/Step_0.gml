@@ -28,7 +28,7 @@ else{
 
 
 if(isBreaking){
-	playingCounter = min(playingCounter + 1/25, 1);
+	breakingCounter = min(breakingCounter + 1/25, 1);
 	//tileGamePos = [SmoothLerp(tileGridPos[0], tileGridPosNext[0], anc_fall, "Fall", consideringMoveCounter), SmoothLerp(tileGridPos[1], tileGridPosNext[1], anc_fall, "Fall", consideringMoveCounter)];
 
 }
