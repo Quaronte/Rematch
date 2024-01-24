@@ -35,7 +35,8 @@ ds_list_copy(playingDeck, obj_game.deck);
 ds_list_shuffle(playingDeck);
 
 var initialDeckSize = ds_list_size(playingDeck);
-for(var i = 0; i < initialDeckSize; i++){
+var initialTiles = 25;
+for(var i = 0; i < initialTiles; i++){
 	CreateTileTopRandomPos(playingDeck[| 0]);
 	ds_list_add(discardedDeck, playingDeck[| 0]);
 	ds_list_delete(playingDeck, 0);
@@ -43,7 +44,7 @@ for(var i = 0; i < initialDeckSize; i++){
 
 CheckGroups();	
 
-repeat(5){
+repeat(3){
 	CreateEnemy(irandom(enemyT.enemy2));
 }
 movesPerTurn = 3;
