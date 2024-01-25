@@ -51,6 +51,7 @@
     {"id":{"name":"spr_emptySlot","path":"sprites/spr_emptySlot/spr_emptySlot.yy",},},
     {"id":{"name":"obj_game","path":"objects/obj_game/obj_game.yy",},},
     {"id":{"name":"spr_attackEffects","path":"sprites/spr_attackEffects/spr_attackEffects.yy",},},
+    {"id":{"name":"spr_nextAction","path":"sprites/spr_nextAction/spr_nextAction.yy",},},
     {"id":{"name":"obj_tile","path":"objects/obj_tile/obj_tile.yy",},},
     {"id":{"name":"Enemy_functions","path":"scripts/Enemy_functions/Enemy_functions.yy",},},
     {"id":{"name":"Utilities_functions","path":"scripts/Utilities_functions/Utilities_functions.yy",},},

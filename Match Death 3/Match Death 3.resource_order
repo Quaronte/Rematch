@@ -28,6 +28,7 @@
     {"name":"spr_monsters","order":2,"path":"sprites/spr_monsters/spr_monsters.yy",},
     {"name":"spr_emptySlot","order":4,"path":"sprites/spr_emptySlot/spr_emptySlot.yy",},
     {"name":"spr_attackEffects","order":5,"path":"sprites/spr_attackEffects/spr_attackEffects.yy",},
+    {"name":"spr_nextAction","order":7,"path":"sprites/spr_nextAction/spr_nextAction.yy",},
     {"name":"obj_tile","order":5,"path":"objects/obj_tile/obj_tile.yy",},
     {"name":"Enemy_functions","order":3,"path":"scripts/Enemy_functions/Enemy_functions.yy",},
     {"name":"Utilities_functions","order":2,"path":"scripts/Utilities_functions/Utilities_functions.yy",},

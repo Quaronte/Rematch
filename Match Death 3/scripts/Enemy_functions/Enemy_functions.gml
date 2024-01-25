@@ -16,6 +16,8 @@ function CreateEnemy(_enemyType, _pos) {
         enemyType = _enemyType;
         
         obj_board.enemyGrid[# enemyGridPos[0], enemyGridPos[1]] = id;
+        
+        EnemyChooseAction();
     }
     
 }
@@ -26,27 +28,27 @@ function EnemyMove(){
 }
 
 function EnemyAttack(){
-	ShowDebug("EnemyAttack");
-	enemyGridPosNext = FindPosInDirection(enemyGridPos, dir.up, 1, obj_board.enemyGrid);
+	obj_board.playerHealth -= 1;
 }
 
-function ChooseActionEnemy() {
-	var _nextCell = FindCellInDirection(enemyGridPos, dir.down, 1, obj_board.enemyGrid);
+function EnemyChooseAction() {
 	
-	//Last Line
-	if(_nextCell == -2){
-		script_execute(enemyLastActionScript);
-		return;
+	if(irandom(2) == 0){
+		enemyNextActionScript = EnemyAttack;
+	}
+	else{
+		enemyNextActionScript = EnemyMove;
 	}
 	
-	//Normal line
-	script_execute(enemyBasicActionScript);
 }
 
 
 function EnemyHit(_typeAttack, _powerAttack){
 	enemyHealth -= _powerAttack;
 	enemyHealthCounter = 1;
+	if(_typeAttack == tileT.magic){
+		enemyNextActionScript = -1;
+	}
 }
 
 function FillEnemyStack(){
@@ -68,10 +70,55 @@ function ExecuteEnemyStack(){
 			return false;
 		}
 		with(ds_stack_pop(enemyStack)){
-			ChooseActionEnemy();
+			if(enemyNextActionScript > 0){
+				script_execute(enemyNextActionScript);
+			}
 			enemyCounter = 0;
 			return true;
 		}
 	}
 	return true;
+}
+
+function DrawEnemy(){
+	//Enemy
+	var _enemySize = 1 + 0.1*hoverScale;
+	draw_sprite_ext(spr_monsters, enemyType, x, y, _enemySize, _enemySize, enemyAngle, c_white, 1);
+	shader_set(shd_flash);
+	draw_sprite_ext(spr_monsters, enemyType, x, y, _enemySize, _enemySize, enemyAngle, c_white, enemyHealthCounter);
+	shader_reset();
+	
+	if(enemyNextActionScript != -2){
+
+		//Next Action
+		var _nextActionSprite = -1;
+		switch(enemyNextActionScript){
+			case EnemyMove:
+				_nextActionSprite = 1;
+			break;
+			case EnemyAttack:
+				_nextActionSprite = 2;
+			break;
+			case -1:
+				_nextActionSprite = 0;
+			break;
+		}
+		shader_set(shd_flash);
+		draw_sprite_ext(spr_nextAction, _nextActionSprite, x, y + sprite_get_height(spr_tiles)*_enemySize*3/4, 1, 1, 0, c_white, 1 - enemyCounter);
+		shader_reset();
+		
+		draw_sprite_ext(spr_nextAction, _nextActionSprite, x, y + sprite_get_height(spr_tiles)*_enemySize*3/4, 1, 1, 0, c_white, 0.5 + 0.5*hoverScale);
+	}
+	
+	//Health
+	for(var i = 0; i < enemyCurrentHealth; i++){
+		draw_sprite_ext(spr_health, 0, x - (sprite_get_width(spr_tiles)/2 - i*sprite_get_width(spr_tiles)/5)*_enemySize, y - (sprite_get_height(spr_tiles)/2)*_enemySize, 1 + 0.1*hoverScale, 1 + 0.1*hoverScale, enemyAngle, c_white, 1);
+	}
+	shader_set(shd_flash){
+		for(var i = enemyHealth; i < enemyCurrentHealth; i++){
+			draw_sprite_ext(spr_health, 0, x - (sprite_get_width(spr_tiles)/2 - i*sprite_get_width(spr_tiles)/5)*_enemySize, y - (sprite_get_height(spr_tiles)/2)*_enemySize, 1 + 0.1*hoverScale, 1 + 0.1*hoverScale, enemyAngle, c_white, enemyHealthCounter);
+		}
+	}
+	shader_reset();
+	
 }

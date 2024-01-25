@@ -23,11 +23,12 @@ ds_grid_clear(enemyGrid, -1);
 
 availableGroupsList = ds_list_create();
 
-
+playerHealth = 10;
+playerCoins = 0;
 
 
 enemyStack = ds_stack_create();
-enemyStackDelay = 10;
+enemyStackDelay = 21;
 enemyStackDelayCounter = 0;
 
 playingDeck = ds_list_create();

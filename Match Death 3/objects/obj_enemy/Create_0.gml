@@ -13,6 +13,8 @@ clickableFunctionOnRelease	= -1;
 enemyBasicActionScript = EnemyMove;
 enemyLastActionScript = EnemyAttack;
 
+enemyNextActionScript = -1;
+
 enemyHitScript = EnemyHit;
 
 enemyGridPos = [-1, -1];

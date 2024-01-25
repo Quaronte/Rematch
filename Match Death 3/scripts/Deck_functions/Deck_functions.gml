@@ -18,7 +18,10 @@ function CreateTile(_type, _pos){
 		}
 		tileGamePos = [tileGridPos[0], tileGridPos[1]];
 		tileGridPosNext = [tileGridPos[0], tileGridPos[1]];
-		// obj_board.playGrid[# tileGridPos[0], tileGridPos[1]] = id;
+		x = tileGamePos[0] * sprite_get_height(spr_tiles);
+		y = tileGamePos[1] * sprite_get_height(spr_tiles);
+
+		obj_board.playGrid[# tileGridPos[0], tileGridPos[1]] = id;
 		
 		TryToFall();
 	}
@@ -34,7 +37,8 @@ function DrawTileFromDeck(_pos){
     		ds_list_copy(playingDeck, discardedDeck);
     		ds_list_clear(discardedDeck);
     	}
-    	CreateTile(playingDeck[| 0], _pos);
+    	var _newTile = CreateTile(playingDeck[| 0], _pos);
+    	tileIsFromDeck = true;
     	ds_list_delete(playingDeck, 0);
     	return true;
     }

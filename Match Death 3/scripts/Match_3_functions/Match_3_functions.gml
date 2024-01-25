@@ -114,26 +114,28 @@ function CheckGroups(){
 	var _currentStreak = 0;
 	var _currentType = -2;
 	var _currentCell = -1;
+
+	
 	for(var i = 0; i < ds_grid_width(obj_board.playGrid); i++){
 		for(var j = 0; j < ds_grid_height(obj_board.playGrid); j++){
 			_currentCell = obj_board.playGrid[# i, j];
 			//Si la casilla es nula, salimos
 			if(_currentCell != -1){
 				if(_currentCell.tileType != _currentType){
-					CheckAndMarkGroup(i, j, _currentStreak, 3, true);
+					CheckAndMarkGroup(i, j, _currentStreak, _currentType, true);
 					_currentStreak = 0;
 				}
 				//Añadimos a nuestra cadena
 				_currentStreak++;			
 			}
 			else{
-				CheckAndMarkGroup(j, i, _currentStreak, 3, false);
+				CheckAndMarkGroup(j, i, _currentStreak, _currentType, false);
 				_currentStreak = 0;
 			}
 			_currentType = _currentCell == -1 ? -1 : _currentCell.tileType;
 		}	
 		//En la última tenemos que comprobar si 
-		CheckAndMarkGroup(i, j, _currentStreak, 3, true);
+		CheckAndMarkGroup(i, j, _currentStreak, _currentType, true);
 		_currentStreak = 0;
 		_currentType = -2;
 	}
@@ -144,26 +146,31 @@ function CheckGroups(){
 			//Si la casilla es nula, salimos
 			if(_currentCell != -1){
 				if(_currentCell.tileType != _currentType){
-					CheckAndMarkGroup(j, i, _currentStreak, 3, false);
+					CheckAndMarkGroup(j, i, _currentStreak, _currentType, false);
 					_currentStreak = 0;
 				}
 				//Añadimos a nuestra cadena
 				_currentStreak++;	
 			}
 			else{
-				CheckAndMarkGroup(j, i, _currentStreak, 3, false);
+				CheckAndMarkGroup(j, i, _currentStreak, _currentType, false);
 				_currentStreak = 0;
 			}
 			_currentType = _currentCell == -1 ? -1 : _currentCell.tileType;
 		}
-		CheckAndMarkGroup(j, i, _currentStreak, 3, false);
+		CheckAndMarkGroup(j, i, _currentStreak, _currentType, false);
 		_currentStreak = 0;
 		_currentType = -2;
 	}
 	IdentifyAllGroups();
 }
 
-function CheckAndMarkGroup(_i, _j, _currentStreak, _groupSize, _isVertical){
+function CheckAndMarkGroup(_i, _j, _currentStreak, _groupType, _isVertical){
+	
+	if(_groupType < 0){ return; }
+	var _groupMinSizes = [3, 3, 3, 3, 3, 3, 1];
+	var _groupSize = _groupMinSizes[_groupType];
+		
 	if(_currentStreak >= _groupSize){
 		for(var k = 1; k <= _currentStreak; k++){
 			with(obj_board.playGrid[# _i - k*!_isVertical, _j - k*_isVertical]){
@@ -230,59 +237,61 @@ function IdentifyGroup(_startingTile, _group){
 	}
 	
 	//Añadimos 
-	ds_list_add(obj_board.availableGroupsList, new CreateGroup(_startingTile.tileType, _groupProperties, _counterDestroy));
+	ds_list_add(obj_board.availableGroupsList, new CreateGroup(_group, _startingTile.tileType, _groupProperties, _counterDestroy));
 	return true;
 }
 
-function CreateGroup(_groupType, _properties, _totalNumber) constructor{
-	ShowDebug("Creando Grupo", _groupType);
+function CreateHighlightElement(_type, _grid, _pos) constructor{
+	highlightElementPos = _pos;
+	highlightElementGrid = _grid;
+	highlightElementType = _type;
+}
+
+function CreateGroup(_groupNumber, _groupType, _properties, _totalNumber) constructor{
+	ShowDebug("Creando Grupo", _groupType, _properties);
 	groupType = _groupType;
 	groupProperties = _properties;
 	groupTotalNumber = _totalNumber;
 	groupIntersections = (groupProperties[0] + groupProperties[1]) - groupTotalNumber;
 	groupActions = [-1, -1];
-	groupGridHighlights = -1;
 	groupAttackPower = [0, 0];
 	groupHighlights = ds_map_create();
 	
 	//Escogemos las posiciones a las que afecta el poder
 	switch(_groupType){
 		case tileT.melee:
-			ShowDebug("Melee");
-			groupGridHighlights = obj_board.enemyGrid;
 			if(groupProperties[0] != 0){
 				groupAttackPower[0] = groupProperties[0];
 				with(obj_tile){
-					if(tileType == _groupType && isHorizontalGroup){
+					if(tileGroup == _groupNumber && isHorizontalGroup){
 						// ShowDebug("Se reconoce como candidato");
 						if(ds_map_find_value(other.groupHighlights, string([0, tileGridPosNext[1]])) == undefined){
 							for(var i = 0; i < 3; i++){
 								// ShowDebug("Se guarda la posicion", [i, tileGridPosNext[1]]);
 								var _currentPos = [i, tileGridPosNext[1]];
-								ds_map_add(other.groupHighlights, string(_currentPos), _currentPos);
+								ds_map_add(other.groupHighlights, string(_currentPos), new CreateHighlightElement(_groupType, obj_board.enemyGrid, _currentPos));
 							}
 						}
 					}
 				}
 			}
 			if(groupProperties[1] != 0){
-				groupAttackPower[1] = groupProperties[1] - 2;
+				HighlightCoins(groupHighlights, _groupNumber);
 			}
 			break;
 		case tileT.range:
 		case tileT.magic:
-			groupGridHighlights = obj_board.enemyGrid;
 			if(groupProperties[0] != 0){
 				groupAttackPower[0] = groupProperties[0] - 2;
 				with(obj_tile){
-					if(tileType == _groupType && isHorizontalGroup){
+					if(tileGroup == _groupNumber && isHorizontalGroup){
 						if(ds_map_find_value(other.groupHighlights, string([0, tileGridPosNext[1]])) == undefined){
-							for(var i = 0; i < ds_grid_width(other.groupGridHighlights); i++){
+							for(var i = 0; i < ds_grid_width(obj_board.enemyGrid); i++){
 								var _currentPos = [i, tileGridPosNext[1]];
-								ds_map_add(other.groupHighlights, string(_currentPos), _currentPos);
+								ds_map_add(other.groupHighlights, string(_currentPos), new CreateHighlightElement(_groupType, obj_board.enemyGrid, _currentPos));
 								//Salimos de aqui
-								if(other.groupGridHighlights[# i, tileGridPosNext[1]] != -1){
-									i = ds_grid_width(other.groupGridHighlights);
+								if(obj_board.enemyGrid[# i, tileGridPosNext[1]] != -1){
+									i = ds_grid_width(obj_board.enemyGrid);
 								}
 							}
 						}
@@ -290,42 +299,39 @@ function CreateGroup(_groupType, _properties, _totalNumber) constructor{
 				}
 			}
 			if(groupProperties[1] != 0){
-				groupAttackPower[1] = groupProperties[1] - 2;
+				HighlightCoins(groupHighlights, _groupNumber);
 			}
 			break;
 		case tileT.shield:
 		case tileT.bomb:
-			ShowDebug("Rango");
-			groupGridHighlights = obj_board.enemyGrid;
 			if(groupProperties[0] != 0){
-				groupAttackPower[0] = 1;
+				groupAttackPower[0] = groupProperties[0] - 2;
 				with(obj_tile){
-					if(tileType == _groupType && isHorizontalGroup){
-						ds_map_add(other.groupHighlights, string(tileGridPosNext), tileGridPosNext);
+					if(tileGroup == _groupNumber && isHorizontalGroup){
+						ds_map_add(other.groupHighlights, string(tileGridPosNext), new CreateHighlightElement(_groupType, obj_board.enemyGrid, tileGridPosNext));
 					}
 				}
 			}
 			if(groupProperties[1] != 0){
-				groupAttackPower[1] = groupProperties[1] - 2;
+				HighlightCoins(groupHighlights, _groupNumber);
 			}
 			break;
 		case tileT.energy:
-			groupGridHighlights = obj_board.playGrid;
 			if(groupProperties[0] != 0){
 				groupAttackPower[0] = 2*groupProperties[0] - 1;
 				with(obj_tile){
-					if(tileType == _groupType && isHorizontalGroup){
+					if(tileGroup == _groupNumber && isHorizontalGroup){
 						if(ds_map_find_value(other.groupHighlights, string([0, 0])) == undefined){
-							for(var i = 0; i < ds_grid_width(other.groupGridHighlights); i++){
+							for(var i = 0; i < ds_grid_width(obj_board.playGrid); i++){
 								var _currentPos = [i, 0];
-								ds_map_add(other.groupHighlights, string(_currentPos), _currentPos);
+								ds_map_add(other.groupHighlights, string(_currentPos), new CreateHighlightElement(_groupType, obj_board.playGrid, _currentPos));
 							}
 						}
 					}
 				}
 			}
 			if(groupProperties[1] != 0){
-				groupAttackPower[1] = groupProperties[1] - 2;
+				HighlightCoins(groupHighlights, _groupNumber);
 			}
 			break;
 	}
@@ -334,9 +340,37 @@ function CreateGroup(_groupType, _properties, _totalNumber) constructor{
 	
 }
 
+function HighlightCoins(_currentGroup, _groupNumber){
+	var _horizontalPos = 0;
+	var _lowestVerticalPos = 0;
+
+	with(obj_tile){
+		if(tileGroup == _groupNumber && isVerticalGroup){
+			_horizontalPos = tileGridPosNext[0];
+			_lowestVerticalPos = max(_lowestVerticalPos, tileGridPosNext[1]);
+		}
+	}
+	groupAttackPower[1] = groupProperties[1] - 2;
+	var _currentPos = -1;
+	for(var i = 0; i < groupAttackPower[1]; i++){
+	
+		_currentPos = [_horizontalPos, _lowestVerticalPos - i];
+		ShowDebug("Creamos monedas en", _currentPos);
+		ds_map_add(_currentGroup, string(_currentPos), new CreateHighlightElement(tileT.coin, obj_board.playGrid, _currentPos));
+	}
+	for(var i = 0; i < groupProperties[1]; i++){
+		_currentPos = [_horizontalPos, i];
+		ds_map_add(_currentGroup, string(_currentPos), new CreateHighlightElement(tileT.energy, obj_board.playGrid, _currentPos));
+	}
+}
+
 function ClearAllGroups(){
 	for(var i = 0; i < ds_list_size(obj_board.availableGroupsList); i++){
 		var _currentGroup = obj_board.availableGroupsList[| i];
+		var _currentGroupHighlightsArray = ds_map_values_to_array(_currentGroup.groupHighlights);
+		for(var j = 0; j < array_length(_currentGroupHighlightsArray); j++){
+			delete _currentGroupHighlightsArray[j]
+		}
 		ds_map_destroy(_currentGroup.groupHighlights);
 		delete obj_board.availableGroupsList[| i];
 	}
@@ -354,77 +388,65 @@ function TryBreakingGroup(_group){
 	//Buscamos el grupo necesario
 	with(obj_board.availableGroupsList[| _group]){
 		var _currentGroupHighlightsMap = ds_map_values_to_array(groupHighlights);
-		
-			switch(groupType){
+		for(var i = 0; i < array_length(_currentGroupHighlightsMap); i++){
+			var _currentGroupHighlightsElement = _currentGroupHighlightsMap[i];	
+			var _currentCell = _currentGroupHighlightsElement.highlightElementGrid[# _currentGroupHighlightsElement.highlightElementPos[0], _currentGroupHighlightsElement.highlightElementPos[1]];
+			switch(_currentGroupHighlightsElement.highlightElementType){
 				case tileT.melee:
-					for(var i = 0; i < array_length(_currentGroupHighlightsMap); i++){
-						var _currentGroupHighlightsArray = _currentGroupHighlightsMap[i];
-						var _currentCell = groupGridHighlights[# _currentGroupHighlightsArray[0], _currentGroupHighlightsArray[1]];
-						if( _currentCell != -1){
-							with(_currentCell){
-								script_execute(enemyHitScript, other.groupType, other.groupAttackPower[0]);
-							}
+					if( _currentCell != -1){
+						with(_currentCell){
+							script_execute(enemyHitScript, other.groupType, other.groupAttackPower[0]);
 						}
 					}
 					break;
 				case tileT.range:
-					for(var i = 0; i < array_length(_currentGroupHighlightsMap); i++){
-						var _currentGroupHighlightsArray = _currentGroupHighlightsMap[i];
-						var _currentCell = groupGridHighlights[# _currentGroupHighlightsArray[0], _currentGroupHighlightsArray[1]];
-						if( _currentCell != -1){
-							with(_currentCell){
-								script_execute(enemyHitScript, other.groupType, other.groupAttackPower[0]);
-							}
+					if( _currentCell != -1){
+						with(_currentCell){
+							script_execute(enemyHitScript, other.groupType, other.groupAttackPower[0]);
 						}
 					}
 					break;
 				case tileT.magic:
-					for(var i = 0; i < array_length(_currentGroupHighlightsMap); i++){
-						var _currentGroupHighlightsArray = _currentGroupHighlightsMap[i];
-						var _currentCell = groupGridHighlights[# _currentGroupHighlightsArray[0], _currentGroupHighlightsArray[1]];
-						if( _currentCell != -1){
-							with(_currentCell){
-								script_execute(enemyHitScript, other.groupType, other.groupAttackPower[0]);
-							}
+					if( _currentCell != -1){
+						with(_currentCell){
+							script_execute(enemyHitScript, other.groupType, other.groupAttackPower[0]);
 						}
 					}
 					break;
 				case tileT.shield:
-					for(var i = 0; i < array_length(_currentGroupHighlightsMap); i++){
-						var _currentGroupHighlightsArray = _currentGroupHighlightsMap[i];
-						var _currentCell = groupGridHighlights[# _currentGroupHighlightsArray[0], _currentGroupHighlightsArray[1]];
-						if( _currentCell != -1){
-							with(_currentCell){
-								script_execute(enemyHitScript, other.groupType, other.groupAttackPower[0]);
-							}
+					if( _currentCell != -1){
+						with(_currentCell){
+							script_execute(enemyHitScript, other.groupType, other.groupAttackPower[0]);
 						}
 					}
 					break;
 				case tileT.bomb:
-					for(var i = 0; i < array_length(_currentGroupHighlightsMap); i++){
-						var _currentGroupHighlightsArray = _currentGroupHighlightsMap[i];
-						var _currentCell = groupGridHighlights[# _currentGroupHighlightsArray[0], _currentGroupHighlightsArray[1]];
-						if( _currentCell != -1){
-							with(_currentCell){
-								script_execute(enemyHitScript, other.groupType, other.groupAttackPower[0]);
-							}
+					if( _currentCell != -1){
+						with(_currentCell){
+							script_execute(enemyHitScript, other.groupType, other.groupAttackPower[0]);
 						}
 					}
 					break;
 				case tileT.energy:
 					obj_board.breakingMaxAnimationLength = 40;
-					for(var i = 0; i < ds_grid_width(obj_board.playGrid); i++){
-						DrawTileFromDeck([i, 0]);
+					DrawTileFromDeck([_currentGroupHighlightsElement.highlightElementPos[0], _currentGroupHighlightsElement.highlightElementPos[1]]);
+					break;
+				case tileT.coin:
+					if( _currentCell != -1){
+						with(_currentCell){
+							tileTransform = tileT.coin;
+						}
 					}
 					break;
-				
 			}
-			
 		}
-
+	}
 	
 	with(obj_tile){
 		if(tileGroup == _group){
+			if(tileType == tileT.coin){
+				obj_board.playerCoins++;
+			}
 			isBreaking = true;
 			isVerticalGroup = false;
 			isHorizontalGroup = false;

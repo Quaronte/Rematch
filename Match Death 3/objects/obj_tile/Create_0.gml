@@ -3,7 +3,7 @@
 
 event_inherited();
 
-enum tileT{melee, shield, range, magic, bomb, energy};
+enum tileT{melee, shield, range, magic, bomb, energy, coin};
 enum attackT {melee, area, range, newTiles}
 
 clickableFunctionOnHover	= BasicOnHover;
@@ -17,7 +17,9 @@ tileType = 0;
 tileGridPosNext = [-1, -1];
 tileGridPos = [-1, -1];
 tileGamePos = [-1, -1];
-tileAngle = random_range(-4, 4);
+tileAngle = random_range(-3, 3);
+
+tileTransform = -1;
 
 tileGroup = -1;
 

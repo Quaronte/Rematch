@@ -27,6 +27,7 @@ switch(boardState){
 				
 				with(obj_tile){
 					if(isBreaking){
+						var _transformIntoSomething = tileTransform;
 						obj_board.playGrid[# tileGridPos[0], tileGridPos[1]] = -1;
 						if(tileIsFromDeck){
 							ds_list_add(obj_board.discardedDeck, tileType);
@@ -34,6 +35,9 @@ switch(boardState){
 						instance_destroy();
 						obj_board.clickableSelected = obj_board.clickableSelected == id ? -1 : obj_board.clickableSelected;
 						obj_board.clickableHovered = obj_board.clickableHovered == id ? -1 : obj_board.clickableHovered;
+						if(_transformIntoSomething != -1){
+							CreateTile(_transformIntoSomething, tileGridPos);
+						}
 					}
 				}
 				breakingCounter = 0;
@@ -49,6 +53,9 @@ switch(boardState){
 		if(!ExecuteEnemyStack()){
 			boardState = boardS.playerTurn;	
 			remainingMoves = obj_board.movesPerTurn;
+			with(obj_enemy){
+				EnemyChooseAction();
+			}
 			// repeat(5){
 			// 	CreateTile(irandom(tileT.energy), -1);
 			// }
