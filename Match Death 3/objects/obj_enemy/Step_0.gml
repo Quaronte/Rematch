@@ -23,6 +23,7 @@ if(enemyHealth != enemyCurrentHealth){
     if(enemyHealthCounter == 0){
         enemyCurrentHealth = enemyHealth;
         if(enemyCurrentHealth <= 0){
+			obj_board.enemyGrid[# enemyGridPos[0], enemyGridPos[1]] = -1;
             instance_destroy();
         }
     }
