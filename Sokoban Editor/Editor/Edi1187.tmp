@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://cflgtknxc8ayo"]
+
+[ext_resource type="Script" path="res://Editor/Editor_BasicButton.gd" id="1_h8pnc"]
+[ext_resource type="Texture2D" uid="uid://ctj5b1a4q54cm" path="res://Editor/UIButton.png" id="2_i4aij"]
+[ext_resource type="Texture2D" uid="uid://cg5148yu3ywbi" path="res://Editor/Static_Tileset.png" id="3_lrjks"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u7x70"]
+size = Vector2(56, 62)
+
+[node name="Editor_BasicButton" type="Area2D"]
+script = ExtResource("1_h8pnc")
+
+[node name="UiButton" type="Sprite2D" parent="."]
+texture = ExtResource("2_i4aij")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_u7x70")
+
+[node name="Icon" type="Sprite2D" parent="."]
+scale = Vector2(0.722222, 0.722222)
+texture = ExtResource("3_lrjks")
+region_enabled = true
+region_rect = Rect2(0, 0, 72, 72)
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

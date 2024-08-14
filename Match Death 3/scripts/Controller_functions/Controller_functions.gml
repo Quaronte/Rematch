@@ -1,7 +1,7 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 
-enum dir {right = 0, up = 90, left = 180, down =270}
+enum dir {right = 0, up = 90, left = 180, down = 270}
 
 function CheckHover(){
 	var objectOnMouse = collision_point(mouse_x, mouse_y, obj_clickable, false, true);

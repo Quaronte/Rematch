@@ -1,6 +1,8 @@
 /// @description Insert description here
 // You can write your code in this editor
 
+
+
 for(var i = 0; i < ds_grid_height(playGrid); i++){
 	for(var j = 0; j < ds_grid_width(playGrid); j++){
 		draw_sprite_ext(spr_emptySlot, 0, j*sprite_get_width(spr_tiles), i*sprite_get_width(spr_tiles), 1, 1, 0, c_white, 1);
