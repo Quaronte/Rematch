@@ -2,8 +2,6 @@ extends Moveable
 class_name Player
 
 
-@onready var tile_map : TileMap
-
 const PLAYER_TILESET = preload("res://GridObjects/PlayerTileset.tres")
 
 func setup(_level : Level, _grid : Grid, _init_coord : Vector2i, _shape_coords : Array[Vector2i]):

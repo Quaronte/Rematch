@@ -1,10 +1,6 @@
 extends Moveable
 class_name Crate
 
-
-
-@onready var tile_map : TileMap
-
 const CRATE_TILESET = preload("res://GridObjects/CrateTileset.tres")
 
 func setup(_level : Level, _grid : Grid, _init_coord : Vector2i, _shape_coords : Array[Vector2i]):

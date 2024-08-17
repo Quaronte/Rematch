@@ -58,7 +58,7 @@ func get_looking_pos(_pos : Vector2i, _dir : dirVector):
 	var looking_vector = get_dir_vector(_dir)
 	return _pos + looking_vector
 	
-func get_dir_vector(_dir : dirVector):
+func get_dir_vector(_dir : dirVector) -> Vector2i:
 	return Vector2i(round(cos(deg_to_rad(_dir * 90))), round(- sin(deg_to_rad(_dir * 90))))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

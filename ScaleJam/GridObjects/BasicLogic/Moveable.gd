@@ -5,6 +5,9 @@ var next_coord : Vector2i
 var is_considering_move := false
 
 
+enum moveableState {IDLE, CONSIDERING_MOVE, GROW}
+var current_state := moveableState.IDLE
+
 func setup(_level : Level, _grid : Grid, _init_coord : Vector2i, _shape_coords : Array[Vector2i]):
 	super.setup(_level, _grid, _init_coord, _shape_coords)
 	next_coord = _init_coord
@@ -19,21 +22,22 @@ func _process(delta):
 	pass
 	
 func check_move(move_dir : int) -> bool:
-	is_considering_move = true
+	current_state = moveableState.CONSIDERING_MOVE
 	for shape_coord in shape_coords:
 		var looking_coord = grid.get_looking_pos(pivot_coord + shape_coord, move_dir )
 		if grid.is_out_of_grid(looking_coord) || !level.has_floor(looking_coord): return false
 		if grid.is_empty_coord(looking_coord): continue
 		var object_in_tile = grid.get_object_in_grid(looking_coord)
 		if object_in_tile == self: continue
-		if object_in_tile.is_considering_move: continue
+		if object_in_tile.current_state == moveableState.CONSIDERING_MOVE: continue
 		if object_in_tile.check_move(move_dir): continue
 		return false
 	return true
 
 func check_embebed_move(move_dir : int) -> bool:
 	var current_crate_in = grid.get_object_in_grid(pivot_coord)
-	is_considering_move = true
+	print(current_crate_in)
+	current_state = moveableState.CONSIDERING_MOVE
 	for shape_coord in shape_coords:
 		var looking_coord = grid.get_looking_pos(pivot_coord + shape_coord, move_dir )
 		if grid.is_out_of_grid(looking_coord) || !level.has_floor(looking_coord): return false
@@ -43,13 +47,35 @@ func check_embebed_move(move_dir : int) -> bool:
 		var object_in_tile = grid.get_object_in_grid(looking_coord)
 		if object_in_tile == self: continue
 		if object_in_tile == current_crate_in : continue
-		if object_in_tile.is_considering_move: continue
-		if object_in_tile.check_move(move_dir): continue
+		if object_in_tile.current_state == moveableState.CONSIDERING_MOVE: 
+			continue
+		if object_in_tile.check_move(move_dir): 
+			#TODO: Grow slime from here
+			continue
 		return false
 	return true
 
+func try_to_grow(_grow_dir: Vector2i):
+	print("Will something grow?")
+	current_state = moveableState.IDLE
+	var possible_grow_coords : Array
+	for shape_coord in shape_coords:
+		var new_shape_coord = shape_coord + _grow_dir
+		if shape_coords.has(new_shape_coord): continue
+		if grid.is_out_of_grid(pivot_coord + new_shape_coord) || !level.has_floor(pivot_coord + new_shape_coord): return
+		if !grid.is_empty_coord(pivot_coord + new_shape_coord): return
+		possible_grow_coords.append(new_shape_coord)
+	print("Something grows!")
+	for new_coord in possible_grow_coords:
+		shape_coords.append(new_coord)
+	tile_map.set_cells_terrain_connect(0, shape_coords, 0, 0)
+#func grow_in_scale()
+
+func is_considering_moving() -> bool:
+	return current_state == moveableState.CONSIDERING_MOVE
+
 func check_squishy_move(move_dir : int) -> bool:
-	is_considering_move = true
+	current_state = moveableState.CONSIDERING_MOVE
 	for shape_coord in shape_coords:
 		var looking_coord = grid.get_looking_pos(pivot_coord + shape_coord, move_dir )
 		if grid.is_out_of_grid(looking_coord) || !level.has_floor(looking_coord): return false
@@ -66,8 +92,7 @@ func update_moveable_object_in_grid():
 
 func finish_move():
 	is_considering_move = false
-
-	#current_state = moveState.IDLE
+	current_state = moveableState.IDLE
 
 func move(move_dir):
 	next_coord = grid.get_looking_pos(pivot_coord, move_dir)

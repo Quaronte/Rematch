@@ -40,28 +40,47 @@ func _process(delta):
 	#var moveables_can_move = player.receive_input(current_input)
 	var movement_tween : Tween
 	#NORMAL MOVE
-	if player.check_move(current_input):
-		for moveable in moveable_objects:
-			if moveable.is_considering_move:
+	var current_crate_in = player.grid.get_object_in_grid(player.pivot_coord)
+	if current_crate_in is Crate:
+		print("Here")
+		if player.check_embebed_move(current_input):
+			print("Embebed move")
+			if player.grid.get_object_in_grid(player.pivot_coord) != player.grid.get_object_in_grid(player.grid.get_looking_pos(player.pivot_coord, current_input)):
+				current_crate_in.try_to_grow(player.grid.get_dir_vector(current_input))
+			for moveable in moveable_objects:
+				if !moveable.is_considering_moving(): continue
 				movement_tween = moveable.move(current_input)
-				moveable.is_considering_move = false
-	#FREE MOVE
-	else:
-		for moveable in moveable_objects:
-			if moveable is Player: continue
-			if !moveable.is_considering_move: continue
-			movement_tween = moveable.stumble(current_input)
-			moveable.is_considering_move = false
-		if player.check_squishy_move(current_input):
-			movement_tween = player.move(current_input)
 		else:
-			movement_tween = player.stumble(current_input)
+			print("Mmm?")
+			for moveable in moveable_objects:
+				if !moveable.is_considering_moving(): continue
+				movement_tween = moveable.stumble(current_input)
+	else:
+		if player.check_move(current_input):
+			print("Normal move")
+			for moveable in moveable_objects:
+				if moveable.is_considering_moving():
+					movement_tween = moveable.move(current_input)
+		#FREE MOVE
+		else:
+			print("Forced move move")
+			for moveable in moveable_objects:
+				if moveable is Player: continue
+				if !moveable.is_considering_moving(): continue
+				movement_tween = moveable.stumble(current_input)
+			if player.check_squishy_move(current_input):
+				movement_tween = player.move(current_input)
+			else:
+				movement_tween = player.stumble(current_input)
 	current_state = levelState.MOVING
 
 	
 	movement_tween.tween_callback(finished_turn).finished
 	
 	pass
+
+
+	
 
 func destroy_level():
 	print("Destorying level?")

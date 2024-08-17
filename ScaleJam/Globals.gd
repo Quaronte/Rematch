@@ -1,8 +1,8 @@
 extends Node
 
 
-var rows = 5
-var columns = 10
+var rows = 10
+var columns = 15
 const CELL_SIZE = 64
 const BIG_CELL_SIZE = 72
 
