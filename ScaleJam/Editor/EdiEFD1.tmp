@@ -1,11 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://dhodva8v14cdo"]
+[gd_scene load_steps=12 format=3 uid="uid://dhodva8v14cdo"]
 
 [ext_resource type="Script" path="res://Editor/Editor.gd" id="1_ady6w"]
-[ext_resource type="Texture2D" uid="uid://cg5148yu3ywbi" path="res://Editor/Static_Tileset.png" id="2_6fhl4"]
+[ext_resource type="Texture2D" uid="uid://cg5148yu3ywbi" path="res://Sprites/Static_Tileset.png" id="2_6fhl4"]
 [ext_resource type="Texture2D" uid="uid://dnmgoq56rbwlc" path="res://TilesetTest.png" id="2_b0r8d"]
-[ext_resource type="Texture2D" uid="uid://b8ibng4fu01fs" path="res://Editor/Moveable_Tileset.png" id="3_3vsx5"]
+[ext_resource type="Texture2D" uid="uid://b8ibng4fu01fs" path="res://Sprites/Moveable_Tileset.png" id="3_3vsx5"]
 [ext_resource type="PackedScene" uid="uid://de3iqyjui3233" path="res://Game_UI.tscn" id="5_gjnhy"]
-[ext_resource type="Texture2D" uid="uid://bnsqpmf23gqcr" path="res://Background.png" id="6_8a026"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6tsxc"]
 texture = ExtResource("2_b0r8d")
@@ -141,28 +140,34 @@ sources/0 = SubResource("TileSetAtlasSource_rd57u")
 
 [node name="Editor" type="Node2D"]
 script = ExtResource("1_ady6w")
+load_level = "{
+	\"COLUMNS\":
+10,
+	\"ROWS\":
+5,
+	\"FLOOR\":
+[[-1, -1, -1, -1, -1],[3, 0, 0, 0, -1],[-1, 1, 1, 1, -1],[-1, 1, 1, 1, -1],[-1, 1, 1, 1, -1],[-1, 1, 1, 1, -1],[-1, 1, 1, 1, -1],[-1, 2, 1, 1, -1],[-1, -1, 2, 2, 3],[-1, -1, -1, -1, -1],],
+	\"MOVEABLE\":
+[[-1, -1, -1, -1, -1],[-1, 0, -1, -1, -1],[-1, -1, -1, -1, -1],[-1, -1, -1, -1, -1],[-1, -1, -1, -1, -1],[-1, 1, -1, -1, -1],[-1, -1, -1, -1, -1],[-1, -1, -1, -1, -1],[-1, -1, -1, -1, -1],[-1, -1, -1, -1, -1],],
+	\"STATIC\":
+[[-1, -1, -1, -1, -1],[-1, -1, -1, -1, -1],[-1, -1, -1, -1, -1],[-1, -1, 0, -1, -1],[-1, -1, -1, -1, -1],[-1, -1, -1, -1, -1],[-1, -1, -1, -1, -1],[-1, -1, -1, -1, -1],[-1, -1, -1, -1, -1],[-1, -1, -1, -1, -1],]
+	}"
 
 [node name="Camera" type="Camera2D" parent="."]
 
-[node name="Background" type="Sprite2D" parent="Camera"]
-z_index = -1000
-texture = ExtResource("6_8a026")
+[node name="EditorScene" type="Node2D" parent="."]
 
-[node name="TileMapFloor" type="TileMap" parent="."]
+[node name="TileMapFloor" type="TileMap" parent="EditorScene"]
 tile_set = SubResource("TileSet_6ced7")
 format = 2
 layer_1/tile_data = PackedInt32Array()
 
-[node name="TileMapStatic" type="TileMap" parent="."]
+[node name="TileMapStatic" type="TileMap" parent="EditorScene"]
 tile_set = SubResource("TileSet_77lc2")
 format = 2
 
-[node name="TileMapMoveable" type="TileMap" parent="."]
+[node name="TileMapMoveable" type="TileMap" parent="EditorScene"]
 tile_set = SubResource("TileSet_6p44r")
 format = 2
 
-[node name="GameUi" parent="." instance=ExtResource("5_gjnhy")]
-
-[node name="FollowCursor" type="Sprite2D" parent="."]
-modulate = Color(1, 1, 1, 0.396078)
-region_enabled = true
+[node name="EditorUI" parent="EditorScene" instance=ExtResource("5_gjnhy")]

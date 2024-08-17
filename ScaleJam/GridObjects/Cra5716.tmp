@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://x43a0dk0ykdf"]
+
+[ext_resource type="Script" path="res://GridObjects/Crate.gd" id="1_afad5"]
+
+[node name="Crate" type="Node2D"]
+script = ExtResource("1_afad5")

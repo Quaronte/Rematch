@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://bmmfoj5wm2ma2"]
+
+[ext_resource type="Script" path="res://GridObjects/Player.gd" id="1_kpypw"]
+[ext_resource type="TileSet" uid="uid://byssgascwwej6" path="res://GridObjects/PlayerTileset.tres" id="2_ck5no"]
+[ext_resource type="Texture2D" uid="uid://f1f05rpth18n" path="res://Sprites/Player.png" id="3_un1rt"]
+
+[node name="Player" type="Node2D"]
+z_index = 100
+script = ExtResource("1_kpypw")
+
+[node name="TileMap" type="TileMap" parent="."]
+position = Vector2(-31, -32)
+tile_set = ExtResource("2_ck5no")
+format = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_un1rt")
+region_rect = Rect2(0, 0, 72, 72)

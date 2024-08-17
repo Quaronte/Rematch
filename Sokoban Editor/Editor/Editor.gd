@@ -9,6 +9,8 @@ class_name Editor
 
 @onready var game_ui = $GameUi
 
+@onready var follow_cursor = $FollowCursor
+
 const EDITOR_BASIC_BUTTON = preload("res://Editor/Editor_BasicButton.tscn")
 var editor_basic_button_array : Array[EditorBasicButton]
 
@@ -52,6 +54,8 @@ func create_editor_button(_value : int, _layer : int):
 	current_button.set_button_type(_value, _layer, Vector2(Globals.CELL_SIZE * (_value + 1), Globals.CELL_SIZE * (_layer + 1)))
 	game_ui.add_child(current_button)
 	editor_basic_button_array.append(current_button)
+	if _layer == Layer.FLOOR:
+		current_button.select()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -61,7 +65,7 @@ func _process(delta):
 
 func edit_level():
 	var mouse_coord = get_mouse_coord()
-	
+	update_cursor_pos()
 	if is_out_of_level(mouse_coord): return
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		match editing_layer:
@@ -111,9 +115,14 @@ func center_camera_to_grid():
 	var diff = Vector2((camera_size.x - level_size.x)/2, (camera_size.y - level_size.y)/2)
 	camera.position = Vector2(-diff.x + camera_size.x/2, -diff.y + camera_size.y/2)
 
-func update_editor_brush(_layer : int, _brush_value : int):
+func update_cursor_pos():
+	follow_cursor.position = get_mouse_coord()*Globals.CELL_SIZE + Vector2i(Globals.BIG_CELL_SIZE, Globals.BIG_CELL_SIZE)/2
+
+func update_editor_brush(_layer : Layer, _brush_value : int, icon_texture : Texture):
 	editing_layer = _layer
 	editing_brush_value = _brush_value
+	follow_cursor.texture = icon_texture
+	follow_cursor.region_rect = Rect2(Vector2(Globals.BIG_CELL_SIZE * _brush_value, 0), Vector2(Globals.BIG_CELL_SIZE, Globals.BIG_CELL_SIZE))
 	for editor_button in editor_basic_button_array:
 		editor_button.deselect()
 
