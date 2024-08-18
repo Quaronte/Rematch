@@ -3,4 +3,5 @@
 [ext_resource type="Script" path="res://GridObjects/Crate.gd" id="1_afad5"]
 
 [node name="Crate" type="Node2D"]
+z_index = 100
 script = ExtResource("1_afad5")

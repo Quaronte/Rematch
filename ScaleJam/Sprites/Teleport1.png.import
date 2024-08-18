@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnmgoq56rbwlc"
-path="res://.godot/imported/Floor_Tileset.png-14f8455d83d6ceb082953cd3a291b937.ctex"
+uid="uid://bt167w7q2x2bc"
+path="res://.godot/imported/Teleport1.png-91c79d9973287024ce9314f9b740e5fc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Floor_Tileset.png"
-dest_files=["res://.godot/imported/Floor_Tileset.png-14f8455d83d6ceb082953cd3a291b937.ctex"]
+source_file="res://Sprites/Teleport1.png"
+dest_files=["res://.godot/imported/Teleport1.png-91c79d9973287024ce9314f9b740e5fc.ctex"]
 
 [params]
 

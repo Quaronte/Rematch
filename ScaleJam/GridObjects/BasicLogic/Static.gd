@@ -1,10 +1,9 @@
 extends GridObject
 class_name Static
 
+var active = false
 var sprite_on : Texture
 var sprite_off : Texture
-
-var active = false
 
 
 func setup(_level : Level, _grid : Grid, _init_coord : Vector2i, _shape_coords : Array[Vector2i]):
@@ -17,14 +16,18 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+	
 
 func activate():
 	active = true
-	sprite.texture = sprite_on
+	update_sprite(sprite_on)
 	pass
 
 
 func deactivate():
 	active = false
-	sprite.texture = sprite_off
+	update_sprite(sprite_off)
+	pass
+
+func update_sprite(_sprite : Texture):
 	pass

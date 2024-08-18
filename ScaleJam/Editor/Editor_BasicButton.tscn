@@ -2,26 +2,29 @@
 
 [ext_resource type="Script" path="res://Editor/Editor_BasicButton.gd" id="1_h8pnc"]
 [ext_resource type="Texture2D" uid="uid://ctj5b1a4q54cm" path="res://Sprites/UIButton.png" id="2_ccgxt"]
-[ext_resource type="Texture2D" uid="uid://ba8s2kjrnbxc2" path="res://Sprites/Floor_Tileset.png" id="3_5emuv"]
 [ext_resource type="Texture2D" uid="uid://wevphhpqwcwu" path="res://Sprites/Selected_Button.png" id="4_y8b0o"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_u7x70"]
 size = Vector2(56, 62)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ndcuc"]
+load_path = "res://.godot/imported/Floor_Tileset.png-14f8455d83d6ceb082953cd3a291b937.ctex"
 
 [node name="Editor_BasicButton" type="Area2D"]
 script = ExtResource("1_h8pnc")
 
 [node name="UiButton" type="Sprite2D" parent="."]
 texture = ExtResource("2_ccgxt")
+region_rect = Rect2(128, 12, 0, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_u7x70")
 
 [node name="Icon" type="Sprite2D" parent="."]
 scale = Vector2(0.722222, 0.722222)
-texture = ExtResource("3_5emuv")
+texture = SubResource("CompressedTexture2D_ndcuc")
 region_enabled = true
-region_rect = Rect2(0, 0, 72, 72)
+region_rect = Rect2(192, 192, 64, 64)
 
 [node name="SelectedButton" type="Sprite2D" parent="."]
 visible = false

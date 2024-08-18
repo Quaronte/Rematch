@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnmgoq56rbwlc"
-path="res://.godot/imported/TilesetTest.png-e58f292df514ed62dc3f5598b231decb.ctex"
+uid="uid://jct123fvnghr"
+path="res://.godot/imported/Teleport2.png-3e534f06eb00c86cf95aa547cda285aa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://TilesetTest.png"
-dest_files=["res://.godot/imported/TilesetTest.png-e58f292df514ed62dc3f5598b231decb.ctex"]
+source_file="res://Sprites/Teleport2.png"
+dest_files=["res://.godot/imported/Teleport2.png-3e534f06eb00c86cf95aa547cda285aa.ctex"]
 
 [params]
 

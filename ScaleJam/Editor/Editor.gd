@@ -156,6 +156,7 @@ func create_level():
 	current_level.add_child(current_level.tilemap_level)
 	convert_unified_moveable_objects()
 	convert_unified_static_objects()
+	current_level.start_level()
 	pass
 	
 func convert_unified_moveable_objects():
@@ -167,7 +168,6 @@ func convert_unified_moveable_objects():
 			if current_object == -1: continue
 			shape_coords_global[current_object].append(Vector2i(col, row))
 	for i in shape_coords_global.size():
-		print(shape_coords_global[i])
 		if shape_coords_global[i].is_empty(): continue
 		current_level.instanciate_moveable(i, shape_coords_global[i])
 
@@ -231,18 +231,16 @@ func convert_level_to_string():
 	\"STATIC\":\n" + static_tilemap + "
 	}"
 	DisplayServer.clipboard_set(str(grids_str))
-	print("------------------- SAVING ------------------------")
-	print(grids_str)
+	#print("------------------- SAVING ------------------------")
+	#print(grids_str)
 	
 
 func load_level_from_string(_string):
-	print("------------------- LOADING ------------------------")
+	#print("------------------- LOADING ------------------------")
 	clear_level()
 	var loaded_level = Globals.get_json_dict_from_loaded_level(_string)
 	Globals.columns = loaded_level["COLUMNS"]
 	Globals.rows = loaded_level["ROWS"]
-	
-	print("Changing values ", Globals.columns, " ", Globals.rows)
 	
 	load_tilemap_terrain_from_string(tile_map_floor, loaded_level["FLOOR"])
 	load_tilemap_from_string(tile_map_moveable, loaded_level["MOVEABLE"])
@@ -250,7 +248,6 @@ func load_level_from_string(_string):
 	update_tile_map_borders()
 
 func load_tilemap_terrain_from_string(_current_tilemap : TileMap, _new_grid):
-	print(_new_grid)
 	for row in Globals.rows:
 		for col in Globals.columns:
 			var current_pos = Vector2i(col, row)
@@ -258,7 +255,6 @@ func load_tilemap_terrain_from_string(_current_tilemap : TileMap, _new_grid):
 			_current_tilemap.set_cells_terrain_connect(0, [current_pos], 0, 0)
 			
 func load_tilemap_from_string(_current_tilemap : TileMap, _new_grid):
-	print(_new_grid)
 	for row in Globals.rows:
 		for col in Globals.columns:
 			var current_pos = Vector2i(col, row)
@@ -286,7 +282,7 @@ func is_out_of_level(_coord : Vector2i):
 func _draw():
 	draw_rect(Rect2( Vector2(0, 0), level_size), Color(1, 1, 1, 1), false, 5)
 
-func update_tile_map_borders():
+func update_tile_map_top_borders():
 	tile_map_floor.clear_layer(1)
 	for row in Globals.rows:
 		for col in Globals.columns:
@@ -295,5 +291,19 @@ func update_tile_map_borders():
 			if !has_floor(_current_coord): continue
 			if has_floor(aux_coord): continue
 			tile_map_floor.set_cells_terrain_connect(1, [aux_coord], 0, 1)
+			
+func update_tile_map_borders():
+	for row in range(-1, Globals.rows + 1, 1):
+		for col in range(-1, Globals.columns + 1, 1):
+			var _current_coord = Vector2i(col, row)
+			if has_floor(_current_coord): 
+				tile_map_floor.set_cells_terrain_connect(2, [_current_coord], 1, -1)	
+				continue
+			tile_map_floor.set_cells_terrain_connect(2, [_current_coord], 1, 0)		
+			#for i in 3:
+				#for j in 3:
+					#if has_floor(_current_coord + Vector2i(-1 + i, -1 + j)): 
+						#tile_map_floor.set_cells_terrain_connect(2, [_current_coord], 1, 0)
+			
 			
 #endregion

@@ -21,7 +21,6 @@ func _init(_columns, _rows):
 	initialize_grid(null)
 	#print_grid()
 	queue_redraw()
-	print("But creating something right")
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -51,9 +50,6 @@ func is_empty_coord(_coord : Vector2i) -> bool:
 func get_object_in_grid(_coord : Vector2i):
 	return tiles[_coord.x][_coord.y]
 
-func remove_object_from_grid(_coord : Vector2i):
-	tiles[_coord.x][_coord.y] = null
-
 func get_looking_pos(_pos : Vector2i, _dir : dirVector):
 	var looking_vector = get_dir_vector(_dir)
 	return _pos + looking_vector
@@ -71,21 +67,21 @@ func coord_to_pos(_coord : Vector2i) -> Vector2:
 	
 func pos_to_coord(_pos : Vector2) -> Vector2i:
 	return floor(_pos / Globals.CELL_SIZE)
-	
-func remove_object_in_grid(_coord : Vector2i):
-	tiles[_coord.x][_coord.y] = null
 
+func remove_object_from_grid(_coord : Vector2i):
+	tiles[_coord.x][_coord.y] = null
+	
 func _draw():
-	draw_grid()
+	#draw_grid()
+	pass
 
 func draw_grid():
 	for col in columns:
 		for row in rows:
 			if is_empty_coord(Vector2i(col, row)): continue
-			draw_string(NORMAL_FONT, coord_to_pos(Vector2i(col, row))/2 + Vector2(0, - 200)/2, str(get_object_in_grid(Vector2i(col, row))), 2, -1, 12, Color(0.5, 0.23, 0.76))
+			draw_string(NORMAL_FONT, coord_to_pos(Vector2i(col, row)) + Vector2(-600, Globals.CELL_SIZE/2), str(get_object_in_grid(Vector2i(col, row))), 2, -1, 24, Color(0.75, 0.43, 0.96))
 			
 func print_grid():
-	print("This is a grid with ", columns, " columnas y ", rows, "filas")
 	for row in range(rows):
 		var col_str = ""
 		for col in range(columns):
