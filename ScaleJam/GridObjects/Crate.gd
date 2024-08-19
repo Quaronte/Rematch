@@ -23,10 +23,12 @@ func try_to_grow(_grow_dir: int):
 		var new_shape_coord = shape_coord + _grow_vector
 		if shape_coords.has(new_shape_coord): continue
 		if grid.is_out_of_grid(pivot_coord + new_shape_coord) || !level.has_floor(pivot_coord + new_shape_coord): return false
-		if !grid.is_empty_coord(pivot_coord + new_shape_coord):
-			var new_object = grid.get_object_in_grid(pivot_coord + new_shape_coord)
-			if !new_object.check_move(_grow_dir): 
-				return false
+		if grid.is_empty_coord(pivot_coord + new_shape_coord): 
+			possible_grow_coords.append(new_shape_coord)
+			continue
+		var new_object = grid.get_object_in_grid(pivot_coord + new_shape_coord)
+		if new_object.check_move(_grow_dir) == moveableState.STUMBLE: 
+			return false
 		possible_grow_coords.append(new_shape_coord)
 	for new_coord in possible_grow_coords:
 		shape_coords.append(new_coord)
@@ -69,6 +71,15 @@ func check_squish(_squish_dir: int):
 		return false
 	print("We chose to squish ", shape_coords, " ", pivot_coord)
 	return true
+
+func is_partially_or_fully_inmersed_in_object(object) -> bool:
+	var my_coords = get_all_coords()
+	var other_coords = object.get_all_coords()
+	for coord in my_coords:
+		if other_coords.has(coord): 
+			print("Inmersed in player")
+			return true
+	return false
 
 func squish(_squish_dir: int):
 	print("Starting shape - ", shape_coords, " ", pivot_coord)

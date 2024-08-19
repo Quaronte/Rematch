@@ -1,8 +1,9 @@
-[gd_scene load_steps=25 format=3 uid="uid://dhodva8v14cdo"]
+[gd_scene load_steps=26 format=3 uid="uid://dhodva8v14cdo"]
 
 [ext_resource type="Script" path="res://Editor/Editor.gd" id="1_ady6w"]
 [ext_resource type="Texture2D" uid="uid://cg5148yu3ywbi" path="res://Sprites/Static_Tileset.png" id="2_6fhl4"]
 [ext_resource type="Texture2D" uid="uid://dnmgoq56rbwlc" path="res://Sprites/Floor_Tileset.png" id="2_b0r8d"]
+[ext_resource type="Resource" uid="uid://bnawlewxbwwlc" path="res://Levels/LevelTest.tres" id="2_owiq4"]
 [ext_resource type="Resource" uid="uid://h5wlqxt5n7h7" path="res://Levels/Level_01.tres" id="2_yu57d"]
 [ext_resource type="Texture2D" uid="uid://b8ibng4fu01fs" path="res://Sprites/Moveable_Tileset.png" id="3_3vsx5"]
 [ext_resource type="Texture2D" uid="uid://2f52hvm8nxnb" path="res://Sprites/TilemapCorners.png" id="3_gd3fr"]
@@ -503,7 +504,7 @@ load_level = "{
 	\"STATIC\":
 [[-1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, 2, -1],[-1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1],]
 	}"
-all_levels = Array[Resource("res://LevelData.gd")]([ExtResource("2_yu57d"), ExtResource("3_gt8sl"), ExtResource("4_svu7l"), ExtResource("5_kxih5"), ExtResource("6_ouvst"), ExtResource("7_sg4ja"), ExtResource("8_xmp4o"), ExtResource("9_2deom"), ExtResource("10_qrx4n"), ExtResource("11_g6b7c")])
+all_levels = Array[Resource("res://LevelData.gd")]([ExtResource("2_owiq4"), ExtResource("2_yu57d"), ExtResource("3_gt8sl"), ExtResource("4_svu7l"), ExtResource("5_kxih5"), ExtResource("6_ouvst"), ExtResource("7_sg4ja"), ExtResource("8_xmp4o"), ExtResource("9_2deom"), ExtResource("10_qrx4n"), ExtResource("11_g6b7c")])
 
 [node name="Camera" type="Camera2D" parent="."]
 zoom = Vector2(0.95, 0.95)

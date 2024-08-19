@@ -104,15 +104,15 @@ func _input(event):
 				enable_editor()
 				disable_editor()
 				create_level()
+		elif event.is_action_pressed("Restart"):
+			enable_editor()
+			disable_editor()
+			create_level()
 		queue_redraw()
 			
 		input_when_editing(event)
 		if !editing_enabled: return
-		if event.is_action_pressed("Restart"):
-			enable_editor()
-			disable_editor()
-			create_level()
-		elif event.is_action_pressed("GrowLevel"):
+		if event.is_action_pressed("GrowLevel"):
 			grow_level()
 		elif event.is_action_pressed("FitLevel"):
 			fit_level()

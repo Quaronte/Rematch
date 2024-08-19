@@ -46,37 +46,42 @@ func _process(delta):
 	if !player_will_move:
 		pass
 	#INSIDE A SLIME
-	elif player.is_fully_inmersed_in_slime():
-		if player.check_embebed_move(current_input): 
-			var current_crate_in = player.grid.get_object_in_grid(player.pivot_coord)
-			if current_crate_in != player.grid.get_object_in_grid(player.grid.get_looking_pos(player.pivot_coord, current_input)):
-				if player.is_applying_big_force(current_input):
-					if current_crate_in.try_to_grow(current_input):
-						pass
-					else:
-						for moveable in moveable_objects:
-							moveable.current_state = moveable.moveableState.IDLE
-						player.check_move(current_input)
-	#PARTIALLY INSIDE A SLIME
-	elif player.is_partially_inmersed_in_slime():
-		if (current_input % 2 == 1 && player.size.x > 1) || (current_input % 2 == 0 && player.size.y > 1):
-			for shape_coord in player.shape_coords:
-				var something = player.grid.get_object_in_grid(player.pivot_coord + shape_coord)
-				if something is Crate:
-					if !something.is_considering_moving():
-						something.check_move(current_input)
-	#OUTSIDE A SLIME
+	
 	else:
 		var print = player.check_move(current_input)
 		if print == player.moveableState.STUMBLE:
 			if player.is_applying_big_force(current_input):
 				player_will_move = player.check_squish_move(current_input)
 				print("Squishing")
-				#if player_will_move
+				if player_will_move:
+					player.current_state = player.moveableState.MOVE
 			else:
 				for moveable in moveable_objects:
 					if moveable.current_state == moveable.moveableState.MOVE:
 						moveable.current_state = moveable.moveableState.STUMBLE
+		if player.current_state != player.moveableState.STUMBLE:
+			if player.is_fully_inmersed_in_slime():
+				if player.check_embebed_move(current_input): 
+					var current_crate_in = player.grid.get_object_in_grid(player.pivot_coord)
+					if current_crate_in != player.grid.get_object_in_grid(player.grid.get_looking_pos(player.pivot_coord, current_input)):
+						if player.is_applying_big_force(current_input):
+							if current_crate_in.try_to_grow(current_input):
+								pass
+							else:
+								for moveable in moveable_objects:
+									moveable.current_state = moveable.moveableState.IDLE
+								player.check_move(current_input)
+			#PARTIALLY INSIDE A SLIME
+			elif player.is_partially_inmersed_in_slime():
+				if (current_input % 2 == 1 && player.size.x > 1) || (current_input % 2 == 0 && player.size.y > 1):
+					for shape_coord in player.shape_coords:
+						var something = player.grid.get_object_in_grid(player.pivot_coord + shape_coord)
+						if something is Crate:
+							if !something.is_considering_moving():
+								something.check_move(current_input)
+	#OUTSIDE A SLIME
+	#else:
+		#pass
 	
 	current_state = levelState.MOVING
 	#Activate the tweens

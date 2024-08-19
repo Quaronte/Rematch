@@ -36,13 +36,14 @@ func check_move(move_dir : int) -> int:
 		var object_in_tile = grid.get_object_in_grid(looking_coord)
 		if object_in_tile == self: continue
 		if object_in_tile.is_considering_moving(): continue
+		if object_in_tile.is_partially_or_fully_inmersed_in_object(self): continue
 		current_state = max(object_in_tile.check_move(move_dir), current_state)
 	current_state = max(moveableState.MOVE, current_state)
 	return current_state
 
 
 func is_considering_moving() -> bool:
-	return current_state != moveableState.IDLE
+	return current_state != moveableState.IDLE && current_state != moveableState.STUMBLE
 
 
 
