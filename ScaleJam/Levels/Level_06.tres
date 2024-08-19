@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=2 format=3 uid="uid://b2i8s2syuv8wa"]
+
+[ext_resource type="Script" path="res://LevelData.gd" id="1_1w8ec"]
+
+[resource]
+script = ExtResource("1_1w8ec")
+level_string = "{
+	\"COLUMNS\":
+4,
+	\"ROWS\":
+7,
+	\"FLOOR\":
+[[-1, -1, -1, 0, 0, -1, -1],[0, 0, 0, 1, 1, 0, 0],[1, 1, 1, 1, 1, 1, 1],[2, 2, 2, 2, 2, 2, 2],],
+	\"MOVEABLE\":
+[[-1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, 1, -1, -1, -1],[-1, -1, 0, 1, -1, -1, -1],[-1, -1, -1, 1, -1, -1, -1],],
+	\"STATIC\":
+[[-1, -1, -1, -1, -1, -1, -1],[-1, 0, -1, 2, 2, 2, -1],[-1, 0, -1, 2, 2, 2, 1],[-1, 0, -1, 2, 2, 2, -1],]
+	}"

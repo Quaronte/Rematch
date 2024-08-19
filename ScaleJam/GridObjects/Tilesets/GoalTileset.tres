@@ -1,9 +1,9 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://ch4arp4tucv01"]
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://dk2kikd2gdn68"]
 
-[ext_resource type="Texture2D" uid="uid://drulmu3ocb87j" path="res://Sprites/TilesetCrate3.png" id="1_fuuv5"]
+[ext_resource type="Texture2D" uid="uid://et7g2vlwsw57" path="res://Sprites/TilesetGoal.png" id="1_4y6ik"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0raw3"]
-texture = ExtResource("1_fuuv5")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ogw2q"]
+texture = ExtResource("1_4y6ik")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 0:0/0/terrain_set = 0
@@ -91,4 +91,4 @@ tile_size = Vector2i(64, 64)
 terrain_set_0/mode = 2
 terrain_set_0/terrain_0/name = "Body"
 terrain_set_0/terrain_0/color = Color(0.676019, 0.166098, 0.211993, 1)
-sources/1 = SubResource("TileSetAtlasSource_0raw3")
+sources/0 = SubResource("TileSetAtlasSource_ogw2q")

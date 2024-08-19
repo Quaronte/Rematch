@@ -2,8 +2,8 @@ extends Static
 class_name Teleport
 
 
-var can_teleport : bool
-var object_to_teleport
+var is_teleporting : bool
+var objects_to_teleport : Array
 var paired_teleport : Teleport
 
 var sprites : Array
@@ -29,12 +29,19 @@ func update_sprite(_sprite : Texture):
 		sprite.texture = _sprite
 
 func _input(event):
-	if !active: return
-	if level.current_state != level.levelState.IDLE: return
+	if !active || is_teleporting: return
+	#if level.current_state != level.levelState.IDLE: return
 	if event is InputEventKey:
 		if event.is_action_pressed("Teleport"):
-			teleport(object_to_teleport)
-	
+			for object_to_teleport in objects_to_teleport:
+				teleport(object_to_teleport)
+
+
+func check_activation():
+	if !active && objects_to_teleport.size() > 0:
+		activate()
+	elif active && objects_to_teleport.size() == 0:
+		deactivate()
 
 func teleport(_object_to_teleport):
 	
@@ -49,6 +56,7 @@ func teleport(_object_to_teleport):
 	bounce_tween.tween_property(_object_to_teleport, "scale", Vector2(1.0, 1.0), 0.5).from(Vector2(1.2, 0.8)).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT) 
 	
 	level.start_teleport_turn(bounce_tween)
+	is_teleporting = true
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -2,6 +2,8 @@ extends Moveable
 class_name Crate
 
 const CRATE_TILESET = preload("res://GridObjects/Tilesets/CrateTileset.tres")
+const CRATE_TILESET2 = preload("res://GridObjects/Tilesets/Crate2Tileset.tres")
+const CRATE_TILESET3 = preload("res://GridObjects/Tilesets/Crate3Tileset.tres")
 
 func setup(_level : Level, _grid : Grid, _init_coord : Vector2i, _shape_coords : Array[Vector2i]):
 	super.setup(_level, _grid, _init_coord, _shape_coords)
@@ -32,9 +34,45 @@ func try_to_grow(_grow_dir: int):
 	return true
 
 
-func squish(_squish_dir: int):
+func check_squish(_squish_dir: int):
 	print("Checking - ", shape_coords, " ", pivot_coord)
-	current_state = moveableState.CONSIDERING_MOVE
+	var min_values = Vector2i(0, 0)
+	var max_values = Vector2i(0, 0)
+	for shape_coord in shape_coords:
+		min_values.x = min(min_values.x, shape_coord.x)
+		min_values.y = min(min_values.y, shape_coord.y)
+		
+		max_values.x = max(max_values.x, shape_coord.x)
+		max_values.y = max(max_values.y, shape_coord.y)
+	
+	var positions_to_remove : Array
+	match _squish_dir:
+		0:
+			for shape_coord in shape_coords:
+				if shape_coord.x == min_values.x: 
+					positions_to_remove.append(shape_coord)
+		1:	
+			for shape_coord in shape_coords:
+				if shape_coord.y == max_values.y: 
+					positions_to_remove.append(shape_coord)
+		2:
+			for shape_coord in shape_coords:
+				if shape_coord.x == max_values.x: 
+					positions_to_remove.append(shape_coord)
+		3:
+			for shape_coord in shape_coords:
+				if shape_coord.y == min_values.y: 
+					positions_to_remove.append(shape_coord)
+	
+	if positions_to_remove.size() == shape_coords.size():
+		print("We choose to not squish!")
+		return false
+	print("We chose to squish ", shape_coords, " ", pivot_coord)
+	return true
+
+func squish(_squish_dir: int):
+	print("Starting shape - ", shape_coords, " ", pivot_coord)
+	current_state = moveableState.SQUISH
 	remove_object_from_grid()
 	var min_values = Vector2i(0, 0)
 	var max_values = Vector2i(0, 0)
@@ -92,8 +130,6 @@ func squish(_squish_dir: int):
 	update_shape()
 	place_object(pivot_coord)
 	print("Final shape coors when squishing ", shape_coords, " ", pivot_coord)
-
-
 
 func _to_string():
 	return "Crate"

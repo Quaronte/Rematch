@@ -9,8 +9,8 @@ const BIG_CELL_SIZE = 72
 
 #TODO: Cambiar estos valores y los tilemaps asociados
 enum Layer {FLOOR, MOVEABLE, STATIC}
-enum moveableObj {PLAYER, CRATE, CRATE2}
-enum staticObj {TELEPORT, TELEPORT2}
+enum moveableObj {PLAYER, CRATE, CRATE2, CRATE3}
+enum staticObj {TELEPORT, TELEPORT2, GOAL}
 
 
 # Called when the node enters the scene tree for the first time.

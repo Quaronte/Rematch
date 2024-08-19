@@ -2,6 +2,7 @@ extends Node2D
 class_name Editor
 
 @export_multiline var load_level : String = ""
+@export var all_levels : Array[LevelData] = []
 
 @onready var camera = $Camera
 
@@ -24,6 +25,11 @@ var editor_basic_button_array : Array[EditorBasicButton]
 var editing_layer := Globals.Layer.FLOOR
 var editing_brush_value = 0
 
+
+var current_level_number := 0
+
+const NORMAL_FONT = preload("res://NormalFont.ttf")
+
 var level_size :
 	get:
 		return Vector2(Globals.CELL_SIZE * Globals.columns, Globals.CELL_SIZE * Globals.rows)
@@ -31,12 +37,24 @@ var level_size :
 #region SETTING UP THE EDITOR
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if load_level != "":
-		load_level_from_string(load_level)
+	
+	
+	load_level_from_string(all_levels[0].level_string)
 	center_camera_to_grid()
 	create_editor_buttons()
+	
 	pass # Replace with function body.
 
+
+func level_saved_exists(level_number) -> String:
+	var FILE_BEGIN =  "res://Levels/Level_"
+	level_number += 1
+	if level_number < 10: level_number = "0" + str(level_number)
+	var level_path = FILE_BEGIN + str(level_number) + ".tres"
+	if FileAccess.file_exists(level_path):
+		return str(level_path)
+	return ""
+	
 
 func create_editor_buttons():
 	var floor_button_total = 1
@@ -69,6 +87,7 @@ func center_camera_to_grid():
 func _process(delta):
 	if !editing_enabled: return
 	edit_level()
+	queue_redraw()
 	
 func _input(event):
 	if event is InputEventKey:
@@ -78,12 +97,39 @@ func _input(event):
 				create_level()
 			else:
 				enable_editor()
+		elif event.is_action_pressed("LoadNextLevel"):
+			current_level_number = (current_level_number + 1) % all_levels.size()
+			load_level_from_string(all_levels[current_level_number].level_string)
+			if !editing_enabled:
+				enable_editor()
+				disable_editor()
+				create_level()
+		queue_redraw()
+			
+		input_when_editing(event)
+		if !editing_enabled: return
+		if event.is_action_pressed("Restart"):
+			enable_editor()
+			disable_editor()
+			create_level()
+		elif event.is_action_pressed("GrowLevel"):
+			grow_level()
+		elif event.is_action_pressed("FitLevel"):
+			fit_level()
+			pass
+		elif event.is_action_pressed("ClearLevel"):
+			clear_level()
 		elif event.is_action_pressed("CopyLevel"):
 			convert_level_to_string()
-
 		elif event.is_action_pressed("PasteLevel"):
 			load_level_from_string(DisplayServer.clipboard_get())
-			
+		
+
+
+
+func input_when_editing(event):
+	
+	pass
 #endregion
 
 #region LEVEL EDITOR TOOLS
@@ -102,7 +148,7 @@ func edit_level():
 		draw_tiles()
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		delete_tiles()
-		
+
 
 func delete_tiles():
 	var mouse_coord = get_mouse_coord()
@@ -131,7 +177,52 @@ func clear_level():
 	tile_map_floor.clear_layer(1)
 	tile_map_moveable.clear_layer(0)
 	tile_map_static.clear_layer(0)
+	update_tile_map_borders()
 
+func grow_level():
+	for col in range(Globals.columns, -1, -1):
+		for row in range(Globals.rows, -1, -1):
+			var copy_position := Vector2i(col - 1, row - 1)
+			if !has_floor(copy_position): continue
+			tile_map_floor.set_cell(0, Vector2i(col, row), tile_map_floor.get_cell_source_id(0, copy_position), tile_map_floor.get_cell_atlas_coords(0, copy_position))
+			tile_map_floor.set_cell(0, copy_position, -1)
+			tile_map_moveable.set_cell(0, Vector2i(col, row), tile_map_moveable.get_cell_source_id(0, copy_position), tile_map_moveable.get_cell_atlas_coords(0, copy_position))
+			tile_map_moveable.set_cell(0, copy_position, -1)
+			tile_map_static.set_cell(0, Vector2i(col, row), tile_map_static.get_cell_source_id(0, copy_position), tile_map_static.get_cell_atlas_coords(0, copy_position))
+			tile_map_static.set_cell(0, copy_position, -1)
+	
+	update_tile_map_borders()
+	Globals.columns += 2
+	Globals.rows += 2
+	center_camera_to_grid()
+
+func fit_level():
+	var size = Vector2i.ZERO
+	var boundaries_shape_x = Vector2i(Globals.columns, 0)
+	var boundaries_shape_y = Vector2i(Globals.rows, 0)
+	for row in Globals.rows:
+		for col in Globals.columns:
+			if has_floor(Vector2(col, row)):
+				boundaries_shape_x.x = min(boundaries_shape_x.x, col)
+				boundaries_shape_x.y = max(boundaries_shape_x.y, col)
+				boundaries_shape_y.x = min(boundaries_shape_y.x, row)
+				boundaries_shape_y.y = max(boundaries_shape_y.y, row)
+	size.x = boundaries_shape_x.y - boundaries_shape_x.x + 1
+	size.y = boundaries_shape_y.y - boundaries_shape_y.x + 1
+	if size.x == Globals.columns && size.y == Globals.rows: return
+	for col in size.x:
+		for row in size.y:
+			var copy_position := Vector2i(col + boundaries_shape_x.x, row + boundaries_shape_y.x)
+			tile_map_floor.set_cell(0, Vector2i(col, row), tile_map_floor.get_cell_source_id(0, copy_position), tile_map_floor.get_cell_atlas_coords(0, copy_position))
+			tile_map_floor.set_cell(0, copy_position, -1)
+			tile_map_moveable.set_cell(0, Vector2i(col, row), tile_map_moveable.get_cell_source_id(0, copy_position), tile_map_moveable.get_cell_atlas_coords(0, copy_position))
+			tile_map_moveable.set_cell(0, copy_position, -1)
+			tile_map_static.set_cell(0, Vector2i(col, row), tile_map_static.get_cell_source_id(0, copy_position), tile_map_static.get_cell_atlas_coords(0, copy_position))
+			tile_map_static.set_cell(0, copy_position, -1)
+	update_tile_map_borders()
+	Globals.columns = size.x
+	Globals.rows = size.y
+	center_camera_to_grid()
 #endregion
 
 #region ENTERING PLAY MODE
@@ -161,7 +252,7 @@ func create_level():
 	
 func convert_unified_moveable_objects():
 	#TODO: Hacer que shape_coords sea dinamico
-	var shape_coords_global := [[], [], []]
+	var shape_coords_global := [[], [], [], [], [], []]
 	for row in Globals.rows:
 		for col in Globals.columns:
 			var current_object = tile_map_moveable.get_cell_atlas_coords(0, Vector2i(col, row)).x
@@ -246,6 +337,7 @@ func load_level_from_string(_string):
 	load_tilemap_from_string(tile_map_moveable, loaded_level["MOVEABLE"])
 	load_tilemap_from_string(tile_map_static, loaded_level["STATIC"])
 	update_tile_map_borders()
+	center_camera_to_grid()
 
 func load_tilemap_terrain_from_string(_current_tilemap : TileMap, _new_grid):
 	for row in Globals.rows:
@@ -268,7 +360,6 @@ func load_tilemap_from_string(_current_tilemap : TileMap, _new_grid):
 func has_floor(_cell_to_check : Vector2i) -> bool:
 	return tile_map_floor.get_cell_source_id(0, _cell_to_check) != -1
 
-
 func get_mouse_coord() -> Vector2i:
 	var mouse_position = get_global_mouse_position()
 	return floor(mouse_position / Globals.CELL_SIZE)
@@ -280,7 +371,10 @@ func is_out_of_level(_coord : Vector2i):
 	
 #region POLISH:
 func _draw():
-	draw_rect(Rect2( Vector2(0, 0), level_size), Color(1, 1, 1, 1), false, 5)
+	if editing_enabled:
+		draw_rect(Rect2( Vector2(0, 0), level_size), Color(1, 1, 1, 1), false, 5)
+	draw_string(NORMAL_FONT, Vector2(level_size.x + 100, level_size.y / 2), str(current_level_number + 1), HORIZONTAL_ALIGNMENT_CENTER, -1, 40)
+	draw_string(NORMAL_FONT, Vector2(level_size.x + 100, level_size.y / 2 + 50), str(Engine.get_frames_per_second()), HORIZONTAL_ALIGNMENT_CENTER, -1, 40)
 
 func update_tile_map_top_borders():
 	tile_map_floor.clear_layer(1)

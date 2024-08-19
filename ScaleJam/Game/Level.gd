@@ -10,6 +10,7 @@ var static_grid : Grid
 const CRATE = preload("res://GridObjects/Crate.tscn")
 const PLAYER = preload("res://GridObjects/Player.tscn")
 const TELEPORT = preload("res://GridObjects/Teleport.tscn")
+const GOAL = preload("res://GridObjects/Goal.tscn")
 
 enum levelState {IDLE, MOVING}
 var current_state := levelState.IDLE
@@ -42,37 +43,56 @@ func _process(delta):
 	var movement_tween : Tween
 	
 	var player_will_move = player.check_player_move_freely(current_input)
-	var objects_will_move = true
-	#NORMAL MOVE
-	var current_crate_in = player.grid.get_object_in_grid(player.pivot_coord)
-	if current_crate_in is Crate:
-		if player.check_embebed_move(current_input):
-			if player.grid.get_object_in_grid(player.pivot_coord) != player.grid.get_object_in_grid(player.grid.get_looking_pos(player.pivot_coord, current_input)):
-				if current_crate_in.try_to_grow(current_input):
-					objects_will_move = true
-				else:
-					for moveable in moveable_objects:
-						moveable.current_state = moveable.moveableState.IDLE
-					objects_will_move = player.check_move(current_input)
-		else:
-			objects_will_move = false
-			
+	if !player_will_move:
+		pass
+	#INSIDE A SLIME
+	elif player.is_fully_inmersed_in_slime():
+		if player.check_embebed_move(current_input): 
+			var current_crate_in = player.grid.get_object_in_grid(player.pivot_coord)
+			if current_crate_in != player.grid.get_object_in_grid(player.grid.get_looking_pos(player.pivot_coord, current_input)):
+				if player.is_applying_big_force(current_input):
+					if current_crate_in.try_to_grow(current_input):
+						pass
+					else:
+						for moveable in moveable_objects:
+							moveable.current_state = moveable.moveableState.IDLE
+						player.check_move(current_input)
+	#PARTIALLY INSIDE A SLIME
+	elif player.is_partially_inmersed_in_slime():
+		if (current_input % 2 == 1 && player.size.x > 1) || (current_input % 2 == 0 && player.size.y > 1):
+			for shape_coord in player.shape_coords:
+				var something = player.grid.get_object_in_grid(player.pivot_coord + shape_coord)
+				if something is Crate:
+					if !something.is_considering_moving():
+						something.check_move(current_input)
+	#OUTSIDE A SLIME
 	else:
-		objects_will_move = player.check_move(current_input)
-		if !objects_will_move:
-			if player.is_player_big():
-				print("Checking for squish move")
+		var print = player.check_move(current_input)
+		if print == player.moveableState.STUMBLE:
+			if player.is_applying_big_force(current_input):
 				player_will_move = player.check_squish_move(current_input)
+				print("Squishing")
+				#if player_will_move
+			else:
+				for moveable in moveable_objects:
+					if moveable.current_state == moveable.moveableState.MOVE:
+						moveable.current_state = moveable.moveableState.STUMBLE
 	
 	current_state = levelState.MOVING
 	#Activate the tweens
 	for moveable in moveable_objects:
-		if moveable is Player: continue
-		if !moveable.is_considering_moving(): continue
-		if objects_will_move:
-			movement_tween = moveable.move(current_input)
-		else:
-			movement_tween = moveable.stumble(current_input)
+		if moveable is Player:continue
+		#print(moveable, " Se considera en ", c)
+		match moveable.current_state:
+			moveable.moveableState.MOVE:
+				movement_tween = moveable.move(current_input)
+			moveable.moveableState.STUMBLE, moveable.moveableState.SQUISH, moveable.moveableState.GROW:
+				movement_tween = moveable.stumble(current_input)
+			moveable.moveableState.TOOSMALL:
+				moveable.blink_red()
+				movement_tween = moveable.stumble(current_input)
+			moveable.moveableState.IDLE:
+				pass
 	if player_will_move:
 		movement_tween = player.move(current_input)
 	else:
@@ -98,29 +118,24 @@ func finished_turn():
 	current_state = levelState.IDLE
 	for moveable in moveable_objects:
 		moveable.update_moveable_object_in_grid()
+		#moveable.current_state = moveable
 	check_teleports()
 	
 func check_teleports(): 
 	for teleport in teleports:
-		var object_on_top = moveable_grid.get_object_in_grid(teleport.pivot_coord)
-		var covered = !moveable_grid.is_empty_coord(teleport.pivot_coord)
-		for shape_coord in teleport.shape_coords:
-			if moveable_grid.get_object_in_grid(teleport.pivot_coord + shape_coord) != object_on_top: 
-				covered = false
-				
-		
-		if covered:
-			if teleport.shape_coords.size() != object_on_top.shape_coords.size(): 
-				if teleport.active:
-					teleport.deactivate()
-			else:
-				teleport.activate()
-				teleport.object_to_teleport = object_on_top
-		else:
-			if teleport.active:
-				teleport.deactivate()
-		
-			
+		teleport.is_teleporting = false
+		teleport.objects_to_teleport.clear()
+		var teleport_coords = teleport.get_all_coords()
+		for moveable in moveable_objects:
+			var moveable_coords = moveable.get_all_coords()
+			var covered = true
+			if teleport_coords.size() != moveable_coords.size(): continue
+			for i in teleport_coords.size():
+				if teleport_coords[i] != moveable_coords[i]:
+					covered = false
+			if covered:
+				teleport.objects_to_teleport.append(moveable)
+		teleport.check_activation()
 	
 func instanciate_moveable(moveable_type, _all_coords):
 	var _spawn_pos = _all_coords[0]
@@ -132,7 +147,7 @@ func instanciate_moveable(moveable_type, _all_coords):
 		Globals.moveableObj.PLAYER:
 			new_moveable = PLAYER.instantiate()
 			player = new_moveable
-		Globals.moveableObj.CRATE, Globals.moveableObj.CRATE2:
+		Globals.moveableObj.CRATE, Globals.moveableObj.CRATE2, Globals.moveableObj.CRATE3:
 			new_moveable = CRATE.instantiate()
 	new_moveable.setup(self, moveable_grid, _spawn_pos, _shape_coords)
 	add_child(new_moveable)
@@ -150,8 +165,14 @@ func instanciate_static(static_type, _all_coords):
 			new_static.setup(self, static_grid, _spawn_pos, _shape_coords)
 			add_child(new_static)
 			teleports.append(new_static)
+		Globals.staticObj.GOAL:
+			var new_static = GOAL.instantiate()
+			new_static.setup(self, static_grid, _spawn_pos, _shape_coords)
+			add_child(new_static)
+
 
 func setup_teleporters():
+	if teleports.size() != 2: return
 	teleports[0].paired_teleport = teleports[1]
 	teleports[1].paired_teleport = teleports[0]
 

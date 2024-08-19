@@ -1,22 +1,12 @@
-[gd_scene load_steps=25 format=3 uid="uid://dhodva8v14cdo"]
+[gd_scene load_steps=15 format=3 uid="uid://dhodva8v14cdo"]
 
 [ext_resource type="Script" path="res://Editor/Editor.gd" id="1_ady6w"]
 [ext_resource type="Texture2D" uid="uid://cg5148yu3ywbi" path="res://Sprites/Static_Tileset.png" id="2_6fhl4"]
 [ext_resource type="Texture2D" uid="uid://dnmgoq56rbwlc" path="res://Sprites/Floor_Tileset.png" id="2_b0r8d"]
-[ext_resource type="Resource" uid="uid://h5wlqxt5n7h7" path="res://Levels/Level_01.tres" id="2_yu57d"]
 [ext_resource type="Texture2D" uid="uid://b8ibng4fu01fs" path="res://Sprites/Moveable_Tileset.png" id="3_3vsx5"]
 [ext_resource type="Texture2D" uid="uid://2f52hvm8nxnb" path="res://Sprites/TilemapCorners.png" id="3_gd3fr"]
-[ext_resource type="Resource" uid="uid://csl3goaxlvu23" path="res://Levels/Level_02.tres" id="3_gt8sl"]
-[ext_resource type="Resource" uid="uid://bllhro4osw3da" path="res://Levels/Level_03.tres" id="4_svu7l"]
 [ext_resource type="PackedScene" uid="uid://de3iqyjui3233" path="res://Game_UI.tscn" id="5_gjnhy"]
-[ext_resource type="Resource" uid="uid://dhg4j7jrif5i1" path="res://Levels/Level_04.tres" id="5_kxih5"]
-[ext_resource type="Resource" uid="uid://oijng60qrorb" path="res://Levels/Level_05.tres" id="6_ouvst"]
 [ext_resource type="Texture2D" uid="uid://do2tpalwwemmk" path="res://Sprites/Background.png" id="7_oem78"]
-[ext_resource type="Resource" uid="uid://b2i8s2syuv8wa" path="res://Levels/Level_06.tres" id="7_sg4ja"]
-[ext_resource type="Resource" uid="uid://d257y4s0xo0bq" path="res://Levels/Level_07.tres" id="8_xmp4o"]
-[ext_resource type="Resource" uid="uid://hdls1aed0opa" path="res://Levels/Level_08.tres" id="9_2deom"]
-[ext_resource type="Resource" uid="uid://bulccub7c5ipm" path="res://Levels/Level_09.tres" id="10_qrx4n"]
-[ext_resource type="Resource" uid="uid://blp03uk0e5t0t" path="res://Levels/Level_10.tres" id="11_g6b7c"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3w7cl"]
 texture = ExtResource("3_gd3fr")
@@ -493,17 +483,16 @@ position = Vector2(-1, 0)
 script = ExtResource("1_ady6w")
 load_level = "{
 	\"COLUMNS\":
-5,
+10,
 	\"ROWS\":
-8,
+10,
 	\"FLOOR\":
-[[0, 0, 0, 0, 0, -1, -1, -1],[2, 2, 2, 1, 1, 0, 0, 0],[-1, -1, -1, 1, 1, 1, 1, 1],[0, 0, 0, 1, 1, 2, 2, 2],[2, 2, 2, 2, 2, -1, -1, -1],],
+[[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, 0, -1, -1, -1, -1],[-1, -1, -1, 0, 0, 1, 0, 0, 0, -1],[-1, -1, -1, 1, 1, 2, 1, 1, 1, -1],[-1, -1, 3, 2, 1, -1, 1, 1, 1, -1],[-1, -1, -1, -1, 1, 0, 1, 2, 2, -1],[-1, -1, -1, -1, 1, 1, 1, -1, -1, -1],[-1, -1, -1, -1, 2, 2, 2, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],],
 	\"MOVEABLE\":
-[[-1, -1, -1, 1, 1, -1, -1, -1],[-1, -1, 2, 1, 1, -1, -1, -1],[-1, -1, -1, 1, 1, -1, -1, -1],[-1, 0, 0, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1],],
+[[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, 1, 1, -1, -1, -1, -1, -1],[-1, -1, -1, 1, 1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, 0, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],],
 	\"STATIC\":
-[[-1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, 2, -1],[-1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1],]
+[[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, 0, 0, -1],[-1, -1, -1, -1, -1, -1, -1, 0, 0, -1],[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, 1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],]
 	}"
-all_levels = Array[Resource("res://LevelData.gd")]([ExtResource("2_yu57d"), ExtResource("3_gt8sl"), ExtResource("4_svu7l"), ExtResource("5_kxih5"), ExtResource("6_ouvst"), ExtResource("7_sg4ja"), ExtResource("8_xmp4o"), ExtResource("9_2deom"), ExtResource("10_qrx4n"), ExtResource("11_g6b7c")])
 
 [node name="Camera" type="Camera2D" parent="."]
 zoom = Vector2(0.95, 0.95)
